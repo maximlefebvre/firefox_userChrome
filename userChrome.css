@@ -1,0 +1,118 @@
+#tabbrowser-tabs:not([noshadowfortests])
+    .tab-background:is([selected], [multiselected]) {
+    box-shadow: none !important;
+}
+
+.tab-background {
+    border-bottom: none !important;
+}
+
+/* tabs all roundy */
+.tab-background,
+.tab-loading-burst {
+    border: none !important;
+    border-radius: 13px !important;
+}
+
+/* get rid of lines on selected/hovered tabs */
+.tab-line {
+    display: none !important;
+}
+
+#urlbar-background,
+#urlbar {
+    border-radius: 13px !important;
+}
+
+#tracking-protection-icon-container {
+    border-radius: 13px !important;
+    background-color: white !important;
+}
+
+:root {
+    --toolbarbutton-border-radius: 13px !important;
+}
+
+/* Arrondir les boutons de fermeture des onglets */
+.tab-close-button {
+    border-radius: 10px !important;
+}
+
+/*.tabs-newtab-button {
+    border-radius: 13px !important;
+}*/
+
+.tracking-protection-icon-container {
+    background-color: transparent !important;
+}
+
+#tracking-protection-icon-container {
+    background-color: transparent !important;
+}
+
+#tabs-newtab-button:hover > .toolbarbutton-icon {
+    border-radius: 15px !important; /* Vous pouvez ajuster la valeur '8px' */
+}
+
+/* Make Toolbar Small */
+#urlbar-container,
+#search-container,
+#nav-bar-customization-target,
+#nav-bar {
+    --urlbar-container-height: 45px !important;
+}
+
+/* Make Tabsbar Bigger */
+:root {
+    --tab-min-height: 32px !important;
+}
+:root #tabbrowser-tabs {
+    --tab-min-height: 32px !important; /* needs to be the same as above under :root */
+    /*    margin-bottom: -1px;*/
+    padding-top: 1px;
+}
+
+/*$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+/* ==================================================
+   Style Firefox similaire à Edge
+   - Marges autour de la page
+   - Coins arrondis sur tous les angles
+   ================================================== */
+
+/* Application des coins arrondis au contenu de la page */
+browser[type="content-primary"],
+browser[type="content"] {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 10px 10px 10px rgba(255, 255, 255, 1) !important;
+}
+
+/* Style pour le contenu web affiché */
+#tabbrowser-tabpanels {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+/* Alternative pour cibler directement le viewport */
+.browserContainer {
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Supprimer le bloc Compte / Profil / Synchronisation dans le menu hamburger */
+#appMenu-fxa-status,
+#appMenu-fxa-status2,
+#appMenu-fxa-container,
+#appMenu-fxa-separator,
+#appMenu-profiles-button,
+#appMenu-mainView .panel-subview-body > toolbarbutton:first-child,
+#appMenu-mainView
+    .panel-subview-body
+    > toolbarbutton:first-child
+    + toolbarseparator {
+    display: none !important;
+}
