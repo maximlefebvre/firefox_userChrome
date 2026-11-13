@@ -1,0 +1,188 @@
+/* ==================================================
+   userContent.css — pages internes de Firefox (about:preferences,
+   nouvel onglet, extensions, about:config…) assorties à userChrome.css :
+   - plus de violet : accents noir / blanc / gris
+   - boutons gris sans contour, menu de gauche en gris doux
+   - mêmes arrondis (10px) et contours fins que l'interface
+   Suit le mode clair / sombre. Aucun effet sur les sites web.
+   Variables lues dans le design system de Firefox 157 (Nova).
+   ================================================== */
+
+@-moz-document url-prefix("about:"), url-prefix("chrome://") {
+
+  /* ---------- Palette (identique à userChrome.css) ---------- */
+  :root {
+    --cx-bg:          #f5f5f5;
+    --cx-surface:     #ffffff;
+    --cx-text:        #1f1f1f;
+    --cx-text-muted:  #6b6b6b;
+    --cx-border:      rgba(0, 0, 0, .09);
+    --cx-border-strong: rgba(0, 0, 0, .16);
+    --cx-fill:        rgba(127, 127, 127, .12);   /* bouton au repos */
+    --cx-fill-hover:  rgba(127, 127, 127, .20);
+    --cx-fill-active: rgba(127, 127, 127, .28);
+    --cx-accent:        #1f1f1f;
+    --cx-accent-hover:  #000000;
+    --cx-accent-active: #3a3a3a;
+    --cx-on-accent:     #ffffff;
+    --cx-radius:      10px;
+    --cx-radius-card: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --cx-bg:          #141414;
+      --cx-surface:     #212121;
+      --cx-text:        #ececec;
+      --cx-text-muted:  #9a9a9a;
+      --cx-border:      rgba(255, 255, 255, .09);
+      --cx-border-strong: rgba(255, 255, 255, .16);
+      --cx-accent:        #ececec;
+      --cx-accent-hover:  #ffffff;
+      --cx-accent-active: #c8c8c8;
+      --cx-on-accent:     #141414;
+    }
+  }
+
+  /* Les composants (moz-*) redéfinissent ces variables dans leur shadow
+     DOM : il faut les poser sur l'élément lui-même pour qu'elles gagnent. */
+  :root,
+  :is(moz-page-nav, moz-page-nav-button, moz-button, moz-button-group,
+      moz-box-item, moz-box-button, moz-box-link, moz-box-group, moz-card,
+      moz-input-search, moz-input-text, moz-toggle, moz-checkbox, moz-radio,
+      moz-radio-group, moz-select, moz-fieldset, moz-message-bar,
+      moz-support-link, setting-group, setting-control) {
+    /* Fonds et textes */
+    --background-color-canvas:   var(--cx-bg) !important;
+    --background-color-box:      var(--cx-surface) !important;
+    --text-color:                var(--cx-text) !important;
+    --text-color-deemphasized:   var(--cx-text-muted) !important;
+
+    /* Contours : fins et discrets partout */
+    --border-color:              var(--cx-border) !important;
+    --border-color-deemphasized: var(--cx-border) !important;
+    --border-color-interactive:  var(--cx-border-strong) !important;
+    --border-color-interactive-hover:  var(--cx-border-strong) !important;
+    --border-color-interactive-active: var(--cx-border-strong) !important;
+    --card-border-color:         var(--cx-border) !important;
+    --box-border-color:          var(--cx-border) !important;
+
+    /* Arrondis : 10px pour les éléments, 14px pour les cartes */
+    --border-radius-medium:      var(--cx-radius) !important;
+    --border-radius-large:       var(--cx-radius-card) !important;
+    --button-border-radius:      var(--cx-radius) !important;
+    --input-border-radius:       var(--cx-radius) !important;
+    --input-search-border-radius: var(--cx-radius) !important;
+    --box-border-radius:         var(--cx-radius) !important;
+    --card-border-radius:        var(--cx-radius-card) !important;
+    --card-box-shadow:           none !important;
+
+    /* Accents : noir / blanc au lieu du violet */
+    --color-accent-primary:          var(--cx-accent) !important;
+    --color-accent-primary-hover:    var(--cx-accent-hover) !important;
+    --color-accent-primary-active:   var(--cx-accent-active) !important;
+    --color-accent-primary-selected: var(--cx-fill) !important;
+    --color-accent-secondary:        var(--cx-fill) !important;
+    --text-color-accent-primary:     var(--cx-text) !important;
+    --text-color-on-accent:          var(--cx-on-accent) !important;
+
+    /* Boutons ordinaires : gris doux, sans contour */
+    --button-background-color:        var(--cx-fill) !important;
+    --button-background-color-hover:  var(--cx-fill-hover) !important;
+    --button-background-color-active: var(--cx-fill-active) !important;
+    --button-background-color-selected: var(--cx-fill-active) !important;
+    --button-text-color:              var(--cx-text) !important;
+    --button-text-color-hover:        var(--cx-text) !important;
+    --button-text-color-active:       var(--cx-text) !important;
+    --button-border-color:            transparent !important;
+    --button-border-color-hover:      transparent !important;
+    --button-border-color-active:     transparent !important;
+
+    /* Boutons fantômes / menus : transparents, gris au survol */
+    --button-background-color-ghost:        transparent !important;
+    --button-background-color-menu:         transparent !important;
+    --button-background-color-ghost-hover:  var(--cx-fill) !important;
+    --button-background-color-ghost-active: var(--cx-fill-hover) !important;
+    --button-background-color-menu-hover:   var(--cx-fill) !important;
+    --button-background-color-menu-active:  var(--cx-fill-hover) !important;
+
+    /* Bouton principal : noir (blanc en sombre) */
+    --button-background-color-primary:        var(--cx-accent) !important;
+    --button-background-color-primary-hover:  var(--cx-accent-hover) !important;
+    --button-background-color-primary-active: var(--cx-accent-active) !important;
+    --button-text-color-primary:        var(--cx-on-accent) !important;
+    --button-text-color-primary-hover:  var(--cx-on-accent) !important;
+    --button-text-color-primary-active: var(--cx-on-accent) !important;
+    --button-border-color-primary:      transparent !important;
+
+    /* Lignes cliquables des cartes (Gérer le compte, Se déconnecter…) :
+       transparentes au repos, grises au survol */
+    --box-button-background-color:        transparent !important;
+    --box-button-background-color-hover:  var(--cx-fill) !important;
+    --box-button-background-color-active: var(--cx-fill-hover) !important;
+    --box-button-text-color:        var(--cx-text) !important;
+    --box-button-text-color-hover:  var(--cx-text) !important;
+    --box-button-text-color-active: var(--cx-text) !important;
+
+    /* Menu de gauche des paramètres : transparent au repos, gris doux
+       au survol, gris un peu plus marqué pour la page ouverte */
+    --page-nav-button-background-color:       transparent !important;
+    --page-nav-button-border-color:           transparent !important;
+    --page-nav-button-border-color-hover:     transparent !important;
+    --page-nav-button-border-color-active:    transparent !important;
+    --page-nav-button-border-radius:          var(--cx-radius) !important;
+    --page-nav-button-border-radius-focused:  var(--cx-radius) !important;
+    --page-nav-button-background-color-hover:    var(--cx-fill) !important;
+    --page-nav-button-background-color-active:   var(--cx-fill-hover) !important;
+    --page-nav-button-background-color-selected: var(--cx-fill-hover) !important;
+    --page-nav-button-text-color-active:   var(--cx-text) !important;
+    --page-nav-button-text-color:          var(--cx-text-muted) !important;
+    --page-nav-button-text-color-hover:    var(--cx-text) !important;
+    --page-nav-button-text-color-selected: var(--cx-text) !important;
+    --page-nav-button-padding: 8px 12px !important;
+
+    /* Champs : fond blanc, contour fin */
+    --input-background-color: var(--cx-surface) !important;
+    --input-border-color:     var(--cx-border-strong) !important;
+    --input-border:           1px solid var(--cx-border-strong) !important;
+
+    /* Focus : contour gris fin au lieu d'un épais contour coloré */
+    --focus-outline-color: rgba(127, 127, 127, .55) !important;
+    --focus-outline-width: 1.5px !important;
+
+    /* Liens, cases, interrupteurs */
+    --link-color:                    var(--cx-text) !important;
+    --link-color-hover:              var(--cx-accent-hover) !important;
+    --link-color-active:             var(--cx-accent-active) !important;
+    --checkbox-checked-bgcolor:      var(--cx-accent) !important;
+    --checkbox-checked-color:        var(--cx-on-accent) !important;
+    --toggle-background-color-pressed:       var(--cx-accent) !important;
+    --toggle-background-color-pressed-hover: var(--cx-accent-hover) !important;
+    --toggle-dot-background-color-on-pressed: var(--cx-on-accent) !important;
+
+    /* Anciennes variables encore utilisées par certaines pages */
+    --in-content-page-background:   var(--cx-bg) !important;
+    --in-content-box-background:    var(--cx-surface) !important;
+    --in-content-border-color:      var(--cx-border) !important;
+    --in-content-primary-button-background:        var(--cx-accent) !important;
+    --in-content-primary-button-background-hover:  var(--cx-accent-hover) !important;
+    --in-content-primary-button-background-active: var(--cx-accent-active) !important;
+    --in-content-primary-button-text-color:        var(--cx-on-accent) !important;
+    --in-content-accent-color:        var(--cx-accent) !important;
+    --in-content-accent-color-active: var(--cx-accent-active) !important;
+    --in-content-link-color:          var(--cx-text) !important;
+    --in-content-focus-outline-color: rgba(127, 127, 127, .55) !important;
+
+    /* Nouvel onglet */
+    --newtab-primary-action-background:     var(--cx-accent) !important;
+    --newtab-primary-element-hover-color:   var(--cx-accent-hover) !important;
+    --newtab-primary-element-active-color:  var(--cx-accent-active) !important;
+    --newtab-primary-element-text-color:    var(--cx-on-accent) !important;
+    --newtab-primary-action-background-dimmed: var(--cx-fill) !important;
+    --newtab-link-primary-color:            var(--cx-text) !important;
+  }
+
+  ::selection {
+    background-color: rgba(127, 127, 127, .3);
+  }
+}
