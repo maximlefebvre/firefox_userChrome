@@ -16,6 +16,7 @@
   --cx-border:     rgba(0, 0, 0, .09);
   --cx-text:       #1f1f1f;
   --cx-text-muted: #6b6b6b;
+  --cx-mix:        rgb(127, 127, 127);   /* base of translucent greys */
   --cx-accent:     #1f1f1f;   /* replaces Firefox purple */
   --cx-accent-hover:  #000000;
   --cx-accent-active: #3a3a3a;
@@ -36,19 +37,24 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  /* Dark neutrals: Hoplum-style layout (frame lighter than the card),
+     values moved towards Zed's One Dark greys (a bit more saturated,
+     frame clearly lighter than the content). Accents stay black / white /
+     grey: no Hoplum or Zed blue. */
   :root {
-    --cx-bg:         #141414;
-    --cx-surface:    #212121;
-    --cx-field:      #2b2b2b;
-    --cx-hover:      rgba(255, 255, 255, .06);
-    --cx-border:     rgba(255, 255, 255, .09);
-    --cx-text:       #ececec;
-    --cx-text-muted: #9a9a9a;
-    --cx-accent:     #ececec;
-    --cx-accent-hover:  #ffffff;
-    --cx-accent-active: #c8c8c8;
-    --cx-on-accent:  #141414;
-    --cx-accent-soft: rgba(255, 255, 255, .08);
+    --cx-bg:         oklch(0.33 0.017 263); /* frame, between Zed panel and titlebar */
+    --cx-surface:    oklch(0.29 0.013 262); /* card, Zed editor background */
+    --cx-field:      oklch(0.33 0.017 263); /* address field hover */
+    --cx-hover:      oklch(0.37 0.02 264); /* hover, Zed elevated surface */
+    --cx-border:     oklch(0.41 0.02 266); /* border, Zed border */
+    --cx-text:       oklch(0.92 0.008 254); /* foreground, Zed text */
+    --cx-text-muted: oklch(0.75 0.02 264); /* muted text, Zed muted */
+    --cx-mix:        oklch(0.62 0.02 262); /* base of translucent greys */
+    --cx-accent:     oklch(0.92 0.008 254); /* accent = text */
+    --cx-accent-hover:  oklch(1 0 0);
+    --cx-accent-active: oklch(0.84 0.012 254); /* accent pressed */
+    --cx-on-accent:  oklch(0.29 0.013 262); /* card */
+    --cx-accent-soft: oklch(0.39 0.02 264); /* selected */
   }
 }
 
@@ -85,7 +91,7 @@ panel,
   --toolbarbutton-icon-fill-attention: var(--cx-text) !important;
   --lwt-toolbarbutton-icon-fill-attention: var(--cx-text) !important;
   --toolbar-field-focus-border-color: var(--cx-border) !important;
-  --toolbar-field-highlight:       rgba(127, 127, 127, .3) !important;
+  --toolbar-field-highlight:       color-mix(in srgb, var(--cx-mix) 30%, transparent) !important;
   --toolbar-field-highlight-text:  var(--cx-text) !important;
   --urlbarView-highlight-background: var(--cx-accent-soft) !important;
   --urlbarView-highlight-color:    var(--cx-text) !important;
@@ -94,9 +100,9 @@ panel,
   --panel-item-active-bgcolor:     var(--cx-accent-soft) !important;
   /* [Nova] regular button hover / active use a desaturated purple
      (e.g. the quit / close-tab dialog): neutral grey instead */
-  --button-background-color-hover:    rgba(127, 127, 127, .20) !important;
-  --button-background-color-active:   rgba(127, 127, 127, .28) !important;
-  --button-background-color-selected: rgba(127, 127, 127, .28) !important;
+  --button-background-color-hover:    color-mix(in srgb, var(--cx-mix) 20%, transparent) !important;
+  --button-background-color-active:   color-mix(in srgb, var(--cx-mix) 28%, transparent) !important;
+  --button-background-color-selected: color-mix(in srgb, var(--cx-mix) 28%, transparent) !important;
   --button-text-color-hover:          var(--cx-text) !important;
   --button-text-color-active:         var(--cx-text) !important;
 }
@@ -104,7 +110,7 @@ panel,
 /* Selected text in the address bar */
 #urlbar-input::selection,
 .urlbar-input::selection {
-  background-color: rgba(127, 127, 127, .3) !important;
+  background-color: color-mix(in srgb, var(--cx-mix) 30%, transparent) !important;
   color: inherit !important;
 }
 
@@ -207,13 +213,13 @@ panel,
 
 /* Hover: grey background and light border on inactive tabs */
 .tabbrowser-tab:hover:not([selected]) .tab-background {
-  background: rgba(127, 127, 127, .12) !important;
+  background: color-mix(in srgb, var(--cx-mix) 12%, transparent) !important;
   border-color: var(--cx-border) !important;
 }
 .tabbrowser-tab:hover:not([selected]) .tab-label { color: var(--cx-text) !important; }
 /* Hovering the active tab: slightly stronger border */
 #tabbrowser-tabs .tabbrowser-tab[selected]:hover .tab-background {
-  border-color: rgba(127, 127, 127, .3) !important;
+  border-color: color-mix(in srgb, var(--cx-mix) 30%, transparent) !important;
 }
 .tab-close-button:hover { background: var(--cx-hover) !important; }
 
@@ -272,7 +278,7 @@ panel,
   padding: 0 !important;
   background: var(--cx-surface) !important;
   border: 1px solid var(--cx-border) !important;
-  border-top-color: rgba(127, 127, 127, .12) !important;  /* lighter line */
+  border-top-color: color-mix(in srgb, var(--cx-mix) 12%, transparent) !important;  /* lighter line */
   border-radius: 0 0 var(--cx-radius-bottom) var(--cx-radius-bottom) !important;
   overflow: clip !important;
   box-shadow: none !important;
@@ -562,7 +568,7 @@ menupopup menu,
 #downloadsPanel {
   --download-progress-fill-color:   var(--cx-text) !important;
   --download-progress-paused-color: var(--cx-text-muted) !important;
-  --download-progress-flare-color:  rgba(127, 127, 127, .35) !important;
+  --download-progress-flare-color:  color-mix(in srgb, var(--cx-mix) 35%, transparent) !important;
   --panel-footer-background-color:  transparent !important;
   --panel-separator-color:          var(--cx-border) !important;
 }
@@ -776,7 +782,7 @@ menupopup menu,
   border-radius: var(--cx-radius) !important;
 }
 #places #placesList > treechildren::-moz-tree-row(hover) {
-  background-color: rgba(127, 127, 127, .12) !important;
+  background-color: color-mix(in srgb, var(--cx-mix) 12%, transparent) !important;
   border-color: var(--cx-border) !important;
 }
 #places #placesList > treechildren::-moz-tree-row(selected) {
@@ -784,7 +790,7 @@ menupopup menu,
   border-color: var(--cx-border) !important;
 }
 #places #placesList > treechildren::-moz-tree-row(selected, hover) {
-  border-color: rgba(127, 127, 127, .3) !important;
+  border-color: color-mix(in srgb, var(--cx-mix) 30%, transparent) !important;
 }
 #places #placesList > treechildren::-moz-tree-cell-text {
   color: var(--cx-text-muted) !important;
@@ -826,7 +832,7 @@ menupopup menu,
    line) filled the right edge and hid the rounded corners */
 #places :is(#placeContent, #downloadsListBox) {
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(127, 127, 127, .45) transparent !important;
+  scrollbar-color: color-mix(in srgb, var(--cx-mix) 45%, transparent) transparent !important;
 }
 /* Details pane (bookmarks): below the card, on the grey background */
 #places #detailsPane {
@@ -949,14 +955,14 @@ menupopup menu,
   --button-border-color:              transparent !important;
   --button-border-color-hover:        transparent !important;
   --button-border-color-active:       transparent !important;
-  --button-background-color:          rgba(127, 127, 127, .12) !important;
+  --button-background-color:          color-mix(in srgb, var(--cx-mix) 12%, transparent) !important;
   --button-text-color:                var(--cx-text) !important;
   --button-border-radius:             var(--cx-radius) !important;
 
   /* Primary button: stronger grey instead of solid black */
-  --button-background-color-primary:        rgba(127, 127, 127, .26) !important;
-  --button-background-color-primary-hover:  rgba(127, 127, 127, .34) !important;
-  --button-background-color-primary-active: rgba(127, 127, 127, .42) !important;
+  --button-background-color-primary:        color-mix(in srgb, var(--cx-mix) 26%, transparent) !important;
+  --button-background-color-primary-hover:  color-mix(in srgb, var(--cx-mix) 34%, transparent) !important;
+  --button-background-color-primary-active: color-mix(in srgb, var(--cx-mix) 42%, transparent) !important;
   --button-text-color-primary:              var(--cx-text) !important;
   --button-text-color-primary-hover:        var(--cx-text) !important;
   --button-text-color-primary-active:       var(--cx-text) !important;

@@ -16,11 +16,12 @@
     --cx-surface:     #ffffff;
     --cx-text:        #1f1f1f;
     --cx-text-muted:  #6b6b6b;
+    --cx-mix:         rgb(127, 127, 127);   /* base of translucent greys */
     --cx-border:      rgba(0, 0, 0, .09);
     --cx-border-strong: rgba(0, 0, 0, .16);
-    --cx-fill:        rgba(127, 127, 127, .12);   /* idle button */
-    --cx-fill-hover:  rgba(127, 127, 127, .20);
-    --cx-fill-active: rgba(127, 127, 127, .28);
+    --cx-fill:        color-mix(in srgb, var(--cx-mix) 12%, transparent);   /* idle button */
+    --cx-fill-hover:  color-mix(in srgb, var(--cx-mix) 20%, transparent);
+    --cx-fill-active: color-mix(in srgb, var(--cx-mix) 28%, transparent);
     --cx-accent:        #1f1f1f;
     --cx-accent-hover:  #000000;
     --cx-accent-active: #3a3a3a;
@@ -30,17 +31,22 @@
   }
 
   @media (prefers-color-scheme: dark) {
+    /* Dark neutrals: Hoplum-style layout (frame lighter than the card),
+       values moved towards Zed's One Dark greys (a bit more saturated,
+       frame clearly lighter than the content). Accents stay black / white /
+       grey: no Hoplum or Zed blue. */
     :root {
-      --cx-bg:          #141414;
-      --cx-surface:     #212121;
-      --cx-text:        #ececec;
-      --cx-text-muted:  #9a9a9a;
-      --cx-border:      rgba(255, 255, 255, .09);
-      --cx-border-strong: rgba(255, 255, 255, .16);
-      --cx-accent:        #ececec;
-      --cx-accent-hover:  #ffffff;
-      --cx-accent-active: #c8c8c8;
-      --cx-on-accent:     #141414;
+      --cx-bg:          oklch(0.33 0.017 263); /* frame, between Zed panel and titlebar */
+      --cx-surface:     oklch(0.29 0.013 262); /* card, Zed editor background */
+      --cx-text:        oklch(0.92 0.008 254); /* foreground, Zed text */
+      --cx-text-muted:  oklch(0.75 0.02 264); /* muted text, Zed muted */
+      --cx-mix:         oklch(0.62 0.02 262); /* base of translucent greys */
+      --cx-border:      oklch(0.41 0.02 266); /* border, Zed border */
+      --cx-border-strong: oklch(0.48 0.02 266); /* field border */
+      --cx-accent:        oklch(0.92 0.008 254); /* accent = text */
+      --cx-accent-hover:  oklch(1 0 0);
+      --cx-accent-active: oklch(0.84 0.012 254); /* accent pressed */
+      --cx-on-accent:     oklch(0.29 0.013 262); /* card */
     }
   }
 
@@ -147,7 +153,7 @@
     --input-border:           1px solid var(--cx-border-strong) !important;
 
     /* Focus: thin grey outline instead of a thick coloured one */
-    --focus-outline-color: rgba(127, 127, 127, .55) !important;
+    --focus-outline-color: color-mix(in srgb, var(--cx-mix) 55%, transparent) !important;
     --focus-outline-width: 1.5px !important;
 
     /* Links, checkboxes, toggles */
@@ -171,7 +177,7 @@
     --in-content-accent-color:        var(--cx-accent) !important;
     --in-content-accent-color-active: var(--cx-accent-active) !important;
     --in-content-link-color:          var(--cx-text) !important;
-    --in-content-focus-outline-color: rgba(127, 127, 127, .55) !important;
+    --in-content-focus-outline-color: color-mix(in srgb, var(--cx-mix) 55%, transparent) !important;
 
     /* New tab page */
     --newtab-primary-action-background:     var(--cx-accent) !important;
@@ -183,6 +189,62 @@
   }
 
   ::selection {
-    background-color: rgba(127, 127, 127, .3);
+    background-color: color-mix(in srgb, var(--cx-mix) 30%, transparent);
   }
 }
+
+/* ---------- New tab / home page: search field always white ----------
+   White field with dark text and icons in both light and dark mode,
+   including on hover and focus. Firefox renders it either as an
+   in-content <moz-urlbar> or as <content-search-handoff-ui>.
+   Not scoped by URL: the new tab page is a built-in add-on whose document
+   URL may not match about:newtab; these elements only exist there. */
+:is(moz-urlbar, content-search-handoff-ui) {
+  --cx-search-bg:     #ffffff;
+  --cx-search-text:   #1f1f1f;
+  --cx-search-muted:  #6b6b6b;
+  --cx-search-border: rgba(0, 0, 0, .10);
+
+  /* <content-search-handoff-ui> */
+  --content-search-handoff-ui-background-color: var(--cx-search-bg) !important;
+  --content-search-handoff-ui-color:            var(--cx-search-text) !important;
+  --content-search-handoff-ui-fill:             var(--cx-search-muted) !important;
+  --content-search-handoff-ui-caret-color:      var(--cx-search-text) !important;
+  --content-search-handoff-ui-fakefocus-border-color:     var(--cx-search-border) !important;
+  --content-search-handoff-ui-fakefocus-box-shadow-inner: transparent !important;
+  --content-search-handoff-ui-fakefocus-box-shadow-outer: transparent !important;
+  --content-search-handoff-ui-unfocused-border-color:     var(--cx-search-border) !important;
+
+  /* <moz-urlbar> */
+  --toolbar-field-background-color:        var(--cx-search-bg) !important;
+  --toolbar-field-background-color-hover:  var(--cx-search-bg) !important;
+  --toolbar-field-focus-background-color:  var(--cx-search-bg) !important;
+  --toolbar-field-background-color-focus:  var(--cx-search-bg) !important;
+  --toolbar-field-border-color-focus:      var(--cx-search-border) !important;
+  --urlbar-background-color:               var(--cx-search-bg) !important;
+  --toolbar-field-color:                   var(--cx-search-text) !important;
+  --toolbar-field-focus-color:             var(--cx-search-text) !important;
+  --toolbar-field-text-color:              var(--cx-search-text) !important;
+  --toolbar-field-text-color-focus:        var(--cx-search-text) !important;
+  --toolbar-field-border-color:            var(--cx-search-border) !important;
+  --toolbar-field-focus-border-color:      var(--cx-search-border) !important;
+  --urlbar-box-text-color:                 var(--cx-search-text) !important;
+  --icon-color:                            var(--cx-search-muted) !important;
+
+  color-scheme: light !important;
+  color: var(--cx-search-text) !important;
+}
+
+moz-urlbar :is(.urlbar-background, #urlbar-background) {
+  background-color: var(--cx-search-bg) !important;
+  border-color: var(--cx-search-border) !important;
+}
+moz-urlbar :is(.urlbar-input, #urlbar-input),
+moz-urlbar :is(.urlbar-input, #urlbar-input)::placeholder {
+  color: var(--cx-search-text) !important;
+}
+moz-urlbar :is(.urlbar-input, #urlbar-input)::placeholder {
+  color: var(--cx-search-muted) !important;
+  opacity: 1 !important;
+}
+
