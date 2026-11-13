@@ -1,118 +1,908 @@
-#tabbrowser-tabs:not([noshadowfortests])
-    .tab-background:is([selected], [multiselected]) {
-    box-shadow: none !important;
+/* ==================================================
+   userChrome.css — style "Codex" pour Firefox 157 (interface Nova)
+   Onglets sur fond gris ; barre d'outils + favoris + page réunis
+   dans une seule carte blanche arrondie. Suit le mode clair / sombre
+   de macOS si le thème Firefox est "Système — automatique".
+   Pas de violet : accents en noir / blanc / gris (voir aussi userContent.css).
+   Version précédente : userChrome.avant-codex.css
+   ================================================== */
+
+/* ---------- Palette ---------- */
+
+:root {
+  --cx-bg:         #ececec;   /* fond fenêtre / barre d'onglets */
+  --cx-surface:    #ffffff;   /* carte : barre d'outils + page */
+  --cx-field:      #efefef;   /* champ d'adresse au survol */
+  --cx-hover:      rgba(0, 0, 0, .05);
+  --cx-border:     rgba(0, 0, 0, .09);
+  --cx-text:       #1f1f1f;
+  --cx-text-muted: #6b6b6b;
+  --cx-accent:     #1f1f1f;   /* remplace le violet de Firefox */
+  --cx-accent-hover:  #000000;
+  --cx-accent-active: #3a3a3a;
+  --cx-on-accent:  #ffffff;
+  --cx-accent-soft: rgba(0, 0, 0, .07);  /* remplace le violet léger */
+  --cx-radius:     10px;   /* un seul arrondi pour tout */
+  --cx-gap:        3px;   /* espace gris autour de la carte */
+  /* Coins du bas de la carte : concentriques avec ceux de la fenêtre
+     (macOS Tahoe : 16px). Arrondi intérieur = extérieur - marge. */
+  --cx-radius-bottom: calc(var(--cx-window-radius) - var(--cx-gap));
+  /* --window-border-radius n'est défini que dans la fenêtre principale :
+     valeur de secours selon macOS pour les autres fenêtres (Bibliothèque) */
+  --cx-window-radius: var(--window-border-radius, 10px);
 }
 
-.tab-background {
-    border-bottom: none !important;
+@media (-moz-mac-tahoe-theme) {
+  :root { --cx-window-radius: var(--window-border-radius, 16px); }
 }
 
-/* tabs all roundy */
-.tab-background,
-.tab-loading-burst {
-    border: none !important;
-    border-radius: 13px !important;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cx-bg:         #141414;
+    --cx-surface:    #212121;
+    --cx-field:      #2b2b2b;
+    --cx-hover:      rgba(255, 255, 255, .06);
+    --cx-border:     rgba(255, 255, 255, .09);
+    --cx-text:       #ececec;
+    --cx-text-muted: #9a9a9a;
+    --cx-accent:     #ececec;
+    --cx-accent-hover:  #ffffff;
+    --cx-accent-active: #c8c8c8;
+    --cx-on-accent:  #141414;
+    --cx-accent-soft: rgba(255, 255, 255, .08);
+  }
 }
 
-/* get rid of lines on selected/hovered tabs */
-.tab-line {
-    display: none !important;
+/* ---------- Plus de violet : accents en noir / blanc / gris ---------- */
+
+:root,
+menupopup,
+panel,
+#urlbar,
+.urlbarView {
+  --color-accent-primary:          var(--cx-accent) !important;
+  --color-accent-primary-hover:    var(--cx-accent-hover) !important;
+  --color-accent-primary-active:   var(--cx-accent-active) !important;
+  --color-accent-primary-selected: var(--cx-accent-soft) !important;
+  --color-accent-secondary:        var(--cx-accent-soft) !important;
+  --text-color-accent-primary:     var(--cx-text) !important;
+  --text-color-on-accent:          var(--cx-on-accent) !important;
+  --button-background-color-primary:        var(--cx-accent) !important;
+  --button-background-color-primary-hover:  var(--cx-accent-hover) !important;
+  --button-background-color-primary-active: var(--cx-accent-active) !important;
+  --button-text-color-primary:     var(--cx-on-accent) !important;
+  --button-primary-bgcolor:        var(--cx-accent) !important;
+  --button-primary-hover-bgcolor:  var(--cx-accent-hover) !important;
+  --button-primary-active-bgcolor: var(--cx-accent-active) !important;
+  --button-primary-color:          var(--cx-on-accent) !important;
+  --focus-outline-color:           var(--cx-text-muted) !important;
+  --link-color:                    var(--cx-text) !important;
+  --link-color-hover:              var(--cx-accent-hover) !important;
+  --link-color-active:             var(--cx-accent-active) !important;
+  --checkbox-checked-bgcolor:      var(--cx-accent) !important;
+  --toggle-background-color-pressed: var(--cx-accent) !important;
+  --tab-loading-fill:              var(--cx-text-muted) !important;
+  --tab-attention-icon-color:      var(--cx-text) !important;
+  --toolbarbutton-icon-fill-attention: var(--cx-text) !important;
+  --lwt-toolbarbutton-icon-fill-attention: var(--cx-text) !important;
+  --toolbar-field-focus-border-color: var(--cx-border) !important;
+  --toolbar-field-highlight:       rgba(127, 127, 127, .3) !important;
+  --toolbar-field-highlight-text:  var(--cx-text) !important;
+  --urlbarView-highlight-background: var(--cx-accent-soft) !important;
+  --urlbarView-highlight-color:    var(--cx-text) !important;
+  --urlbarView-action-color:       var(--cx-text-muted) !important;
+  --urlbarView-url-color:          var(--cx-text-muted) !important;
+  --panel-item-active-bgcolor:     var(--cx-accent-soft) !important;
 }
 
-#urlbar-background,
-#urlbar {
-    border-radius: 13px !important;
+/* Texte sélectionné dans la barre d'adresse */
+#urlbar-input::selection,
+.urlbar-input::selection {
+  background-color: rgba(127, 127, 127, .3) !important;
+  color: inherit !important;
 }
 
-#tracking-protection-icon-container {
-    border-radius: 13px !important;
-    background-color: white !important;
+/* Suggestion sélectionnée dans la liste de la barre d'adresse */
+.urlbarView-row[selected] > .urlbarView-row-inner,
+.urlbarView-row:hover > .urlbarView-row-inner {
+  background-color: var(--cx-accent-soft) !important;
+  color: var(--cx-text) !important;
+}
+.urlbarView-row[selected] :is(.urlbarView-url, .urlbarView-action, .urlbarView-title-separator) {
+  color: var(--cx-text-muted) !important;
+}
+
+/* Icônes et compteurs qui prenaient l'accent violet */
+.toolbarbutton-badge {
+  background-color: var(--cx-accent) !important;
+  color: var(--cx-on-accent) !important;
 }
 
 :root {
-    --toolbarbutton-border-radius: 13px !important;
+  --toolbar-bgcolor:                 var(--cx-surface) !important;
+  --toolbar-color:                   var(--cx-text) !important;
+  --lwt-accent-color:                var(--cx-bg) !important;
+  --lwt-text-color:                  var(--cx-text) !important;
+  --toolbarbutton-hover-background:  var(--cx-hover) !important;
+  --toolbarbutton-active-background: var(--cx-border) !important;
+  --toolbarbutton-border-radius:     var(--cx-radius) !important;
+  --tab-selected-bgcolor:            var(--cx-surface) !important;
+  --tab-selected-textcolor:          var(--cx-text) !important;
+  --toolbar-field-background-color:       var(--cx-field) !important;
+  --toolbar-field-focus-background-color: var(--cx-surface) !important;
+  --toolbar-field-color:             var(--cx-text) !important;
+  --toolbar-field-focus-color:       var(--cx-text) !important;
+  --toolbar-field-border-color:      transparent !important;
+  --chrome-content-separator-color:  transparent !important;  /* [157] liseré blanc */
 }
 
-/* Arrondir les boutons de fermeture des onglets */
+/* Fond gris de la fenêtre */
+#navigator-toolbox,
+#titlebar,
+#TabsToolbar,
+#browser,
+#tabbrowser-tabbox {
+  background: var(--cx-bg) !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* ---------- Onglets ---------- */
+
+/* Hauteur [157] : --tab-min-height seul ne suffit plus */
+:root,
+:root #tabbrowser-tabs {
+  --tab-min-height: 32px !important;
+  --tab-block-margin: 0px !important;
+}
+.tabbrowser-tab,
+.tab-stack {
+  min-height: var(--tab-min-height) !important;
+}
+/* Même espace au-dessus et au-dessous de l'onglet */
+#TabsToolbar,
+#TabsToolbar-customization-target,
+#tabbrowser-tabs,
+#tabbrowser-arrowscrollbox {
+  min-height: 0 !important;
+}
+#TabsToolbar {
+  padding-block: 4px 3px !important;
+}
+.tab-background {
+  margin-block: 0 !important;
+}
+
+.tab-background,
+.tab-loading-burst {
+  border: 1px solid transparent !important;
+  border-radius: var(--cx-radius) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.tab-background {
+  background: transparent !important;
+  transition: background-color .12s ease, border-color .12s ease !important;
+}
+
+/* Survol : fond gris et contour léger sur les onglets inactifs */
+.tabbrowser-tab:hover:not([selected]) .tab-background {
+  background: rgba(127, 127, 127, .12) !important;
+  border-color: var(--cx-border) !important;
+}
+.tabbrowser-tab:hover:not([selected]) .tab-label { color: var(--cx-text) !important; }
+/* Survol de l'onglet actif : contour un peu plus marqué */
+#tabbrowser-tabs .tabbrowser-tab[selected]:hover .tab-background {
+  border-color: rgba(127, 127, 127, .3) !important;
+}
+.tab-close-button:hover { background: var(--cx-hover) !important; }
+
+#tabbrowser-tabs .tabbrowser-tab:is([selected], [multiselected]) .tab-background {
+  background: var(--cx-surface) !important;
+  border-color: var(--cx-border) !important;
+}
+
+.tab-label { font-size: 12.5px !important; }
+.tabbrowser-tab:not([selected]) .tab-label { color: var(--cx-text-muted) !important; }
+
+.tab-line,
+.tabbrowser-tab::before,
+.tabbrowser-tab::after { display: none !important; }
+
 .tab-close-button {
-    border-radius: 10px !important;
+  border-radius: var(--cx-radius) !important;
+  opacity: 0;
+  transition: opacity .12s ease;
+}
+.tabbrowser-tab:hover .tab-close-button,
+.tabbrowser-tab[selected] .tab-close-button { opacity: .7; }
+
+#tabs-newtab-button > .toolbarbutton-icon,
+#new-tab-button > .toolbarbutton-icon { border-radius: var(--cx-radius) !important; }
+
+/* ---------- Carte : barre d'outils + favoris + page ---------- */
+
+/* Haut de la carte : barre de navigation */
+#nav-bar {
+  margin-inline: var(--cx-gap) !important;
+  background: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-bottom: none !important;
+  border-radius: var(--cx-radius) var(--cx-radius) 0 0 !important;
+  box-shadow: none !important;
+  padding-inline: 6px !important;
 }
 
-/*.tabs-newtab-button {
-    border-radius: 13px !important;
-}*/
-
-.tracking-protection-icon-container {
-    background-color: transparent !important;
+/* Milieu : barre de favoris */
+#PersonalToolbar {
+  margin-inline: var(--cx-gap) !important;
+  background: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-block: none !important;
+  padding-block: 0 4px !important;
+}
+#PersonalToolbar toolbarbutton.bookmark-item {
+  border-radius: var(--cx-radius) !important;
+  font-size: 12px !important;
 }
 
-#tracking-protection-icon-container {
-    background-color: transparent !important;
+/* Bas : la page, séparée de la barre par un trait fin */
+#tabbrowser-tabpanels {
+  margin: 0 var(--cx-gap) var(--cx-gap) var(--cx-gap) !important;
+  padding: 0 !important;
+  background: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-top-color: rgba(127, 127, 127, .12) !important;  /* trait plus léger */
+  border-radius: 0 0 var(--cx-radius-bottom) var(--cx-radius-bottom) !important;
+  overflow: clip !important;
+  box-shadow: none !important;
 }
 
-#tabs-newtab-button:hover > .toolbarbutton-icon {
-    border-radius: 15px !important; /* Vous pouvez ajuster la valeur '8px' */
+.browserSidebarContainer,
+.browserContainer,
+.browserStack,
+browser[type="content-primary"],
+browser[type="content"] {
+  border-radius: 0 0 calc(var(--cx-radius-bottom) - 1px) calc(var(--cx-radius-bottom) - 1px) !important;
+  overflow: clip !important;
+  border-block-start: none !important;
+  box-shadow: none !important;
+}
+.browserStack { background: var(--cx-surface) !important; }
+
+/* [157 macOS] Barres de défilement des pages : Firefox les raccourcit
+   pour qu'elles ne soient pas coupées par les coins arrondis, mais
+   seulement pour ses propres arrondis.
+   Ici on ne les raccourcit pas : elles descendent jusqu'en bas, le fond
+   de la barre suit l'arrondi du coin, et le pouce garde la même marge
+   à droite et en bas (sa marge interne macOS). Le pouce n'est pas coupé
+   tant que --cx-scrollbar-inset >= ~0 avec un coin <= 14px ; augmenter
+   cette valeur pour remonter la barre si besoin. */
+:root { --cx-scrollbar-inset: 0px; }
+.browserContainer {
+  --content-scrollbar-inset-block: 0 var(--cx-scrollbar-inset) !important;
+  --content-scrollbar-inset-inline-start: var(--cx-scrollbar-inset) !important;
+  --content-scrollbar-inset-inline-end: var(--cx-scrollbar-inset) !important;
+}
+browser[type="content"] {
+  -moz-scrollbar-inset-block: 0 var(--cx-scrollbar-inset) !important;
+  -moz-scrollbar-inset-inline: var(--cx-scrollbar-inset) var(--cx-scrollbar-inset) !important;
 }
 
-/* Make Toolbar Small */
+/* ---------- Barre d'adresse : champ gris, sans contour, centré ---------- */
+
+/* Hauteur [157] : la variable seule n'est plus respectée */
 #urlbar-container,
 #search-container,
 #nav-bar-customization-target,
 #nav-bar {
-    --urlbar-container-height: 45px !important;
+  --urlbar-container-height: 44px !important;
+}
+#urlbar-container,
+#search-container,
+#nav-bar {
+  min-height: 44px !important;
 }
 
-/* Make Tabsbar Bigger */
+#urlbar-container {
+  max-width: 800px !important;
+  margin-inline: auto !important;
+}
+
+/* [157] le fond peut être #urlbar-background ou .urlbar-background */
+#urlbar,
+#urlbar :is(#urlbar-background, .urlbar-background) {
+  border-radius: var(--cx-radius) !important;
+}
+#urlbar :is(#urlbar-background, .urlbar-background) {
+  background-color: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  box-shadow: none !important;
+  transition: background-color .15s ease, border-color .15s ease !important;
+}
+/* Survol de la barre d'adresse : fond gris clair, contour inchangé */
+#urlbar-container:hover #urlbar:not([focused], [open]) :is(#urlbar-background, .urlbar-background),
+#urlbar:not([focused], [open]):hover :is(#urlbar-background, .urlbar-background) {
+  background-color: var(--cx-field) !important;
+  border-color: var(--cx-border) !important;
+}
+#urlbar:is([focused], [open]) :is(#urlbar-background, .urlbar-background) {
+  background: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  outline: none !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .08) !important;
+}
+
+#urlbar-input { font-size: 13px !important; }
+#urlbar:not([focused]) #urlbar-input { text-align: center !important; }
+
+/* Icônes à gauche de l'URL (cadenas, bouclier) plus discrètes */
+#identity-box,
+#tracking-protection-icon-container,
+.tracking-protection-icon-container {
+  border-radius: var(--cx-radius) !important;
+  background-color: transparent !important;
+}
+/* Bouclier, étoile, etc. : cachés, ils réapparaissent au survol */
+#urlbar:not([focused]) :is(#tracking-protection-icon-container,
+                           #identity-box,
+                           #page-action-buttons) {
+  opacity: 0;
+  transition: opacity .15s ease;
+}
+#urlbar:not([focused]):hover :is(#tracking-protection-icon-container,
+                                 #identity-box,
+                                 #page-action-buttons) { opacity: .6; }
+#urlbar-input-container { padding-inline: 4px !important; }
+
+/* ---------- Boutons de la barre d'outils ---------- */
+
+#nav-bar {
+  --toolbarbutton-outer-padding: 3px !important;
+  --toolbarbutton-inner-padding: 7px !important;
+}
+
+/* Sans contour ; fond gris au survol, plus foncé au clic */
+#nav-bar toolbarbutton > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack, .toolbarbutton-text) {
+  border: none !important;
+  border-radius: var(--cx-radius) !important;
+  transition: background-color .12s ease !important;
+}
+#nav-bar toolbarbutton:not([disabled]):hover > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack, .toolbarbutton-text) {
+  background-color: var(--cx-hover) !important;
+}
+#nav-bar toolbarbutton:not([disabled]):is(:hover:active, [open], [checked]) > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack, .toolbarbutton-text) {
+  background-color: var(--cx-border) !important;
+}
+#stop-reload-button { margin-right: 8px !important; }
+
+/* ---------- Menus et panneaux ---------- */
+
+menupopup,
+panel {
+  --panel-border-radius:      var(--cx-radius) !important;
+  --panel-background:         var(--cx-surface) !important;
+  --panel-border-color:       var(--cx-border) !important;
+  --arrowpanel-border-radius: var(--cx-radius) !important;
+  --arrowpanel-background:    var(--cx-surface) !important;
+  --arrowpanel-border-color:  var(--cx-border) !important;
+}
+
+/* ---------- Arrondis : la même valeur partout ---------- */
+
 :root {
-    --tab-min-height: 32px !important;
+  --border-radius-medium: var(--cx-radius) !important;
+  --border-radius-large:  var(--cx-radius) !important;
+  --urlbar-icon-border-radius: var(--cx-radius) !important;
+  --tab-border-radius:    var(--cx-radius) !important;
 }
-:root #tabbrowser-tabs {
-    --tab-min-height: 32px !important; /* needs to be the same as above under :root */
-    /*    margin-bottom: -1px;*/
-    padding-top: 1px;
+menupopup menuitem,
+menupopup menu,
+.subviewbutton,
+.urlbarView-row-inner,
+.urlbarView-row,
+#identity-box,
+#identity-icon-box,
+#tracking-protection-icon-container,
+.urlbar-page-action,
+.urlbar-icon,
+.searchmode-switcher-chicklet,
+.toolbarbutton-badge-stack {
+  border-radius: var(--cx-radius) !important;
 }
 
-/*$$$$$$$$$$$$$$$$$$$$$$$$*/
+/* ---------- Icônes : noir / blanc, plus de violet ---------- */
+
+:root {
+  --toolbarbutton-icon-fill:          var(--cx-text) !important;
+  --toolbarbutton-icon-fill-opacity:  .85 !important;
+  --lwt-toolbarbutton-icon-fill:      var(--cx-text) !important;
+  --icon-color:                       var(--cx-text) !important;
+  --icon-color-hover:                 var(--cx-text) !important;
+  --icon-color-active:                var(--cx-text) !important;
+  --urlbar-icon-fill-opacity:         .75 !important;
+  --tab-icon-color:                   var(--cx-text) !important;
+}
+
+/* ---------- Petits boutons de la barre d'adresse (Nova) ----------
+   Firefox 157 dessine leur fond via ces variables : le sélecteur de
+   moteur est un <moz-button> dont le fond est dans son shadow DOM,
+   il ne faut donc PAS colorer l'élément lui-même (double fond). */
+
+:root,
+#urlbar {
+  --urlbar-box-background-color:        transparent !important;
+  --urlbar-box-background-color-hover:  var(--cx-hover) !important;
+  --urlbar-box-background-color-active: var(--cx-border) !important;
+  --urlbar-box-background-color-focus:  transparent !important;
+  --urlbar-box-text-color:              var(--cx-text) !important;
+  --urlbar-box-text-color-hover:        var(--cx-text) !important;
+  --urlbar-box-text-color-active:       var(--cx-text) !important;
+  --urlbar-inner-border-radius:         var(--cx-radius) !important;
+}
+
+/* Sélecteur de moteur : même arrondi que le reste, plus compact */
+.searchmode-switcher {
+  --button-border-radius: var(--cx-radius) !important;
+  --button-padding: 0 6px !important;
+  --button-background-color-muted-selected: var(--cx-border) !important;
+}
+.searchmode-switcher-dropmarker {
+  opacity: .55 !important;
+}
+
+#navigator-toolbox :is(.toolbarbutton-icon,
+                       .toolbarbutton-badge-stack > .toolbarbutton-icon,
+                       .urlbar-icon,
+                       .urlbar-page-action > image,
+                       #identity-icon,
+                       #tracking-protection-icon,
+                       .searchmode-switcher-dropmarker,
+                       .bookmark-item > .toolbarbutton-icon,
+                       .tab-close-button):not(#fxa-avatar-image, .avatar, [src]),
+#PersonalToolbar .toolbarbutton-icon:not([src]) {
+  /* fill seulement : forcer aussi stroke transforme certaines icônes
+     (profil, zoom) en disques pleins */
+  fill: var(--cx-text) !important;
+  color: var(--cx-text) !important;
+}
+/* Les icônes des menus (profil, zoom…) gardent leur dessin d'origine */
+
+/* ---------- Survols : gris neutre partout ---------- */
+
+/* Favoris */
+#PersonalToolbar toolbarbutton.bookmark-item {
+  background-color: transparent !important;
+  color: var(--cx-text) !important;
+  transition: background-color .12s ease !important;
+}
+#PersonalToolbar toolbarbutton.bookmark-item:not([disabled]):hover {
+  background-color: var(--cx-hover) !important;
+  color: var(--cx-text) !important;
+}
+#PersonalToolbar toolbarbutton.bookmark-item:not([disabled]):is(:hover:active, [open]) {
+  background-color: var(--cx-border) !important;
+}
+
+/* Icône de recherche / boutons dans la barre d'adresse */
+#urlbar :is(#identity-icon-box,
+            #identity-permission-box,
+            #tracking-protection-icon-container,
+            .urlbar-page-action,
+            .urlbar-icon) {
+  background-color: transparent !important;
+  transition: background-color .12s ease !important;
+}
+#urlbar :is(#identity-icon-box,
+            #identity-permission-box,
+            #tracking-protection-icon-container,
+            .urlbar-page-action,
+            .urlbar-icon):hover {
+  background-color: var(--cx-hover) !important;
+  color: var(--cx-text) !important;
+}
+
+/* Menus et panneaux */
+:is(menupopup menuitem, menupopup menu, .subviewbutton):is(:hover, [_moz-menuactive]) {
+  background-color: var(--cx-hover) !important;
+  color: var(--cx-text) !important;
+}
+
+/* ---------- Aperçu au survol des onglets ----------
+   Ce CSS ne fait que cacher la miniature : Firefox continue de la
+   calculer en arrière-plan. Pour la désactiver vraiment, passer par
+   about:config (effet immédiat, sans redémarrer) :
+     - browser.tabs.hoverPreview.showThumbnails = false
+         → plus de miniature, la carte titre + adresse reste
+     - browser.tabs.hoverPreview.enabled = false
+         → plus de carte du tout, retour à la simple bulle de titre
+   Si la miniature réapparaît après une mise à jour de Firefox, c'est
+   sans doute que #tab-preview-panel a changé de nom : utiliser
+   about:config dans ce cas. */
+
+/* Pour masquer la miniature (et garder titre + adresse), retire les commentaires :
+#tab-preview-panel :is(.tab-preview-thumbnail-container, .tab-preview-thumbnail) {
+  display: none !important;
+}
+*/
+
+/* Pour masquer tout l'aperçu, retire les commentaires ci-dessous :
+#tab-preview-panel { display: none !important; }
+*/
+
+/* ---------- Photo de profil ----------
+   16px par défaut (comme les icônes) ; +1px. La marge négative garde
+   le bouton à la même taille et la photo centrée. */
+#fxa-toolbar-menu-button #fxa-avatar-image {
+  width: 17px !important;
+  height: 17px !important;
+  margin: -0.5px !important;
+}
+
+/* ---------- Panneau des téléchargements ---------- */
+
+#downloadsPanel {
+  --download-progress-fill-color:   var(--cx-text) !important;
+  --download-progress-paused-color: var(--cx-text-muted) !important;
+  --download-progress-flare-color:  rgba(127, 127, 127, .35) !important;
+  --panel-footer-background-color:  transparent !important;
+  --panel-separator-color:          var(--cx-border) !important;
+}
+
+#downloadsPanel-mainView { padding: 6px !important; }
+
+/* Lignes : même arrondi que le reste, survol gris neutre */
+#downloadsListBox > richlistitem {
+  border-radius: var(--cx-radius) !important;
+  margin-block: 1px !important;
+  padding-inline: 4px !important;
+  background-color: transparent !important;
+  transition: background-color .12s ease !important;
+}
+#downloadsListBox > richlistitem:hover {
+  background-color: var(--cx-hover) !important;
+}
+#downloadsListBox > richlistitem:is([selected], :focus-visible) {
+  background-color: var(--cx-accent-soft) !important;
+  outline: none !important;
+}
+.downloadMainArea { border-radius: var(--cx-radius) !important; }
+
+/* Textes : nom du fichier en avant, détails discrets */
+.downloadTarget {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--cx-text) !important;
+}
+.downloadDetails {
+  font-size: 11.5px !important;
+  color: var(--cx-text-muted) !important;
+  opacity: 1 !important;
+}
+
+/* Barre de progression fine, noire (blanche en sombre) */
+#downloadsPanel .downloadProgress {
+  height: 4px !important;
+  border-radius: 2px !important;
+  background-color: var(--cx-hover) !important;
+  --background-color-canvas: var(--cx-hover) !important;
+}
+#downloadsPanel .downloadProgress::-moz-progress-bar {
+  border-radius: 2px !important;
+}
+
+/* Boutons (dossier, annuler, réessayer) : carrés arrondis, sans fond */
+#downloadsPanel .downloadButton {
+  border-radius: var(--cx-radius) !important;
+  background-color: transparent !important;
+  color: var(--cx-text) !important;
+  border: none !important;
+  --button-background-color-hover:  var(--cx-hover) !important;
+  --button-hover-color:             var(--cx-text) !important;
+  --button-background-color-active: var(--cx-border) !important;
+  --button-active-color:            var(--cx-text) !important;
+}
+#downloadsPanel .downloadButton:hover:not(:active) {
+  background-color: var(--cx-hover) !important;
+}
+#downloadsPanel .downloadButton:hover:active {
+  background-color: var(--cx-border) !important;
+}
+#downloadsPanel .downloadButton .button-icon {
+  fill: var(--cx-text) !important;
+  opacity: .75;
+}
+
+/* Résumé et pied : fond transparent, trait fin, bouton au survol gris */
+#downloadsSummary {
+  border-top-color: var(--cx-border) !important;
+  border-radius: 0 0 var(--cx-radius) var(--cx-radius) !important;
+}
+#downloadsSummaryDescription { color: var(--cx-text) !important; }
+#downloadsFooterButtons > toolbarseparator { border-color: var(--cx-border) !important; }
+.downloadsPanelFooterButton {
+  border-radius: var(--cx-radius) !important;
+  color: var(--cx-text) !important;
+}
+.downloadsPanelFooterButton:hover {
+  background-color: var(--cx-hover) !important;
+  color: var(--cx-text) !important;
+}
+.downloadsPanelFooterButton:is([open="true"], :hover:active) {
+  background-color: var(--cx-border) !important;
+}
 
 /* ==================================================
-   Style Firefox similaire à Edge
-   - Marges autour de la page
-   - Coins arrondis sur tous les angles
+   Fenêtre Bibliothèque (Historique, Téléchargements, Marque-pages)
+   Même logique que la fenêtre principale : fond gris, contenu dans
+   une carte blanche arrondie, survols gris neutres.
    ================================================== */
 
-/* Application des coins arrondis au contenu de la page */
-browser[type="content-primary"],
-browser[type="content"] {
-    border-radius: 8px !important;
-    overflow: hidden !important;
-    box-shadow: 10px 10px 10px rgba(255, 255, 255, 1) !important;
+/* Carte : arrondi = arrondi des lignes + marge interne → concentrique.
+   Avec 10px + 3px = 13px = arrondi fenêtre (16px) - marge (3px) :
+   concentrique aussi avec le coin de la fenêtre. */
+#places {
+  --cx-list-pad: 3px;
+  --cx-card-radius: calc(var(--cx-radius) + var(--cx-list-pad));
+  /* Coin bas droit : la valeur calculée depuis --window-border-radius
+     tombe à ~0 dans la Bibliothèque. Mesuré sur capture : fenêtre = 16px,
+     donc 16 - 3 = 13px = arrondi de la carte. On le fixe directement. */
+  --cx-radius-bottom: var(--cx-card-radius);
 }
 
-/* Style pour le contenu web affiché */
-#tabbrowser-tabpanels {
-    border-radius: 8px !important;
-    overflow: hidden !important;
-    margin-left: 2px !important;
-    margin-right: 2px !important;
-    margin-bottom: 2px !important;
+/* Barre de titre native : macOS la dessine lui-même ; on tente de lui
+   donner le fond de la fenêtre (sans effet si macOS l'impose). */
+#places {
+  appearance: none !important;
+  /* La Bibliothèque ne déclare pas de schéma de couleurs : sans ça,
+     ses listes et champs natifs restent en clair même en mode sombre */
+  color-scheme: light dark !important;
 }
 
-/* Alternative pour cibler directement le viewport */
-.browserContainer {
-    border-radius: 8px !important;
-    overflow: hidden !important;
+#places,
+#places #placesView,
+#places #placesList {
+  background-color: var(--cx-bg) !important;
+  color: var(--cx-text) !important;
 }
 
-/* Supprimer le bloc Compte / Profil / Synchronisation dans le menu hamburger */
-#appMenu-fxa-status,
-#appMenu-fxa-status2,
-#appMenu-fxa-container,
-#appMenu-fxa-separator,
-#appMenu-profiles-button,
-#appMenu-mainView .panel-subview-body > toolbarbutton:first-child,
-#appMenu-mainView
-    .panel-subview-body
-    > toolbarbutton:first-child
-    + toolbarseparator {
-    display: none !important;
+/* Barre du haut : fond gris, plus de trait */
+#places #placesToolbar {
+  background: var(--cx-bg) !important;
+  border-bottom: none !important;
+  padding: 0 8px !important;
+  min-height: 44px !important;   /* même hauteur que la barre d'adresse */
+  align-items: center !important;
+  --toolbar-item-height: 32px;
 }
+#places #placesToolbar > toolbarbutton,
+#places #placesMenu > menu {
+  min-height: 32px !important;
+}
+#places #placesToolbar > toolbarbutton,
+#places #placesMenu > menu {
+  appearance: none !important;
+  border-radius: var(--cx-radius) !important;
+  padding: 4px 8px !important;
+  background: transparent !important;
+  color: var(--cx-text) !important;
+  transition: background-color .12s ease !important;
+}
+#places #placesToolbar > toolbarbutton:not([disabled]):hover,
+#places #placesMenu > menu:hover {
+  background-color: var(--cx-hover) !important;
+}
+#places #placesToolbar > toolbarbutton:not([disabled]):is(:hover:active, [open]),
+#places #placesMenu > menu[open] {
+  background-color: var(--cx-border) !important;
+}
+
+/* Recherche : <moz-input-search>, son champ est dans un shadow DOM.
+   On ne style pas l'élément lui-même (double boîte) mais ses variables. */
+#places #searchFilter {
+  appearance: none !important;
+  box-sizing: border-box !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  background-color: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-radius: var(--cx-radius) !important;
+  box-shadow: none !important;
+  overflow: clip !important;
+  transition: background-color .12s ease, box-shadow .12s ease !important;
+  /* champ interne transparent : c'est l'élément qui dessine la pilule */
+  --input-background-color: transparent;
+  --input-border: none;
+  --input-border-radius: var(--cx-radius);
+  --input-search-border-radius: var(--cx-radius);
+  --input-text-color: var(--cx-text);
+  --input-min-height: 30px;
+  --icon-color: var(--cx-text-muted);
+  --focus-outline: none;
+}
+/* Champ interne centré verticalement dans la pilule */
+#places #searchFilter {
+  display: flex !important;
+  align-items: center !important;
+  height: 32px !important;
+  --input-min-height: 100%;
+  --input-height: 100%;
+  line-height: normal !important;
+}
+/* Survol : gris clair, contour inchangé */
+#places #searchFilter:hover:not(:focus-within) {
+  background-color: var(--cx-field) !important;
+}
+#places #searchFilter:focus-within {
+  background-color: var(--cx-surface) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .08) !important;
+}
+
+/* Colonne de gauche : sans bordure, ligne choisie en gris */
+#places #placesList {
+  appearance: none !important;
+  border: none !important;
+  margin: 0 0 var(--cx-gap) 6px !important;
+}
+/* Lignes : même style que les onglets
+   - repos : transparent, contour invisible
+   - survol : gris + contour léger (comme un onglet inactif survolé)
+   - sélection : blanc + contour (comme l'onglet actif)
+   (arbre XUL : l'arrondi n'est appliqué que si Firefox le permet) */
+#places #placesList > treechildren::-moz-tree-row {
+  height: 32px !important;
+  min-height: 32px !important;
+  margin: 2px 6px 2px 0 !important;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--cx-radius) !important;
+}
+#places #placesList > treechildren::-moz-tree-row(hover) {
+  background-color: rgba(127, 127, 127, .12) !important;
+  border-color: var(--cx-border) !important;
+}
+#places #placesList > treechildren::-moz-tree-row(selected) {
+  background-color: var(--cx-surface) !important;
+  border-color: var(--cx-border) !important;
+}
+#places #placesList > treechildren::-moz-tree-row(selected, hover) {
+  border-color: rgba(127, 127, 127, .3) !important;
+}
+#places #placesList > treechildren::-moz-tree-cell-text {
+  color: var(--cx-text-muted) !important;
+}
+#places #placesList > treechildren::-moz-tree-cell-text(hover) {
+  color: var(--cx-text) !important;
+}
+#places #placesList > treechildren::-moz-tree-cell-text(selected) {
+  color: var(--cx-text) !important;
+}
+
+/* Séparateur invisible mais toujours redimensionnable */
+#places #placesView > splitter {
+  border: none !important;
+  background: transparent !important;
+  width: 6px !important;
+  margin-inline-start: 0 !important;
+}
+
+/* Contenu : la liste qui défile devient la carte blanche arrondie
+   (sa barre de défilement reste ainsi à l'intérieur) */
+#places :is(#contentView, #placesViewsBox) {
+  background: transparent !important;
+  border: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+}
+#places :is(#placeContent, #downloadsListBox) {
+  appearance: none !important;
+  min-height: 0 !important;
+  margin: 0 var(--cx-gap) var(--cx-gap) 0 !important;
+  background-color: var(--cx-surface) !important;
+  border: 1px solid var(--cx-border) !important;
+  border-radius: var(--cx-card-radius) var(--cx-card-radius) var(--cx-radius-bottom) var(--cx-card-radius) !important;
+  overflow: clip;
+}
+#places #downloadsListBox { overflow-y: auto !important; overflow-x: hidden !important; }
+/* Barre de défilement fine, sans fond : la piste native (fond clair +
+   trait) remplissait le bord droit et cachait les coins arrondis */
+#places :is(#placeContent, #downloadsListBox) {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(127, 127, 127, .45) transparent !important;
+}
+/* Panneau de détails (marque-pages) : sous la carte, sur le fond gris */
+#places #detailsPane {
+  border-top: none !important;
+  background-color: var(--cx-bg) !important;
+  margin-inline-end: var(--cx-gap) !important;
+}
+#places #contentView:has(> #detailsPane:not([hidden])) #placeContent {
+  border-radius: var(--cx-radius) !important;
+}
+
+/* Arbre Historique / Marque-pages */
+#places #placeContent > treechildren::-moz-tree-row {
+  min-height: 30px !important;
+  border: none !important;
+}
+#places #placeContent > treechildren::-moz-tree-row(hover) {
+  background-color: var(--cx-hover) !important;
+}
+#places #placeContent > treechildren::-moz-tree-row(selected) {
+  background-color: var(--cx-border) !important;
+}
+#places #placeContent > treechildren::-moz-tree-cell-text(selected) {
+  color: var(--cx-text) !important;
+}
+
+/* Liste des téléchargements : lignes arrondies et espacées */
+#places #downloadsListBox { padding: var(--cx-list-pad) !important; }
+/* Pas de marge au-dessus / au-dessous : seule la marge interne de la
+   liste (--cx-list-pad) entoure les lignes, identique sur les 4 côtés.
+   L'espace entre deux lignes est porté par la ligne suivante. */
+#places #downloadsListBox > richlistitem + richlistitem {
+  margin-block-start: 2px !important;
+}
+#places #downloadsListBox > richlistitem {
+  border-radius: var(--cx-radius) !important;
+  margin: 0 !important;
+  padding-inline: 8px 4px !important;
+  min-height: 56px !important;
+  background-color: transparent !important;
+  color: var(--cx-text) !important;
+  transition: background-color .12s ease !important;
+}
+#places #downloadsListBox > richlistitem:hover {
+  background-color: var(--cx-hover) !important;
+}
+#places #downloadsListBox > richlistitem[selected] {
+  background-color: var(--cx-border) !important;
+  color: var(--cx-text) !important;
+  outline: none !important;
+}
+#places #downloadsListBox > richlistitem[selected] :is(.downloadTarget, .downloadDetails) {
+  color: inherit !important;
+}
+#places .downloadTarget {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+#places .downloadDetails {
+  font-size: 11.5px !important;
+  color: var(--cx-text-muted) !important;
+  opacity: 1 !important;
+}
+#places #downloadsListBox > richlistitem[selected] .downloadDetails {
+  color: var(--cx-text-muted) !important;
+}
+
+/* Bouton à droite (afficher dans le Finder, réessayer…) */
+#places .downloadButton {
+  border-radius: var(--cx-radius) !important;
+}
+#places .downloadButton > .button-box {
+  border-radius: var(--cx-radius) !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+#places .downloadButton:hover > .button-box {
+  background-color: var(--cx-hover) !important;
+}
+#places .downloadButton:hover:active > .button-box {
+  background-color: var(--cx-border) !important;
+}
+#places .downloadButton .button-icon {
+  fill: var(--cx-text) !important;
+  opacity: .7;
+}
+
+/* Barre de progression : même style que le panneau */
+#places .downloadProgress {
+  height: 4px !important;
+  border-radius: 2px !important;
+  background-color: var(--cx-hover) !important;
+  --background-color-canvas: var(--cx-hover) !important;
+  --download-progress-fill-color: var(--cx-text) !important;
+}
+#places .downloadProgress::-moz-progress-bar { border-radius: 2px !important; }
