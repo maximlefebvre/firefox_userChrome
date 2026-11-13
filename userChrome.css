@@ -92,6 +92,13 @@ panel,
   --urlbarView-action-color:       var(--cx-text-muted) !important;
   --urlbarView-url-color:          var(--cx-text-muted) !important;
   --panel-item-active-bgcolor:     var(--cx-accent-soft) !important;
+  /* [Nova] regular button hover / active use a desaturated purple
+     (e.g. the quit / close-tab dialog): neutral grey instead */
+  --button-background-color-hover:    rgba(127, 127, 127, .20) !important;
+  --button-background-color-active:   rgba(127, 127, 127, .28) !important;
+  --button-background-color-selected: rgba(127, 127, 127, .28) !important;
+  --button-text-color-hover:          var(--cx-text) !important;
+  --button-text-color-active:         var(--cx-text) !important;
 }
 
 /* Selected text in the address bar */
@@ -101,10 +108,23 @@ panel,
   color: inherit !important;
 }
 
-/* Selected suggestion in the address bar dropdown */
-.urlbarView-row[selected] > .urlbarView-row-inner,
-.urlbarView-row:hover > .urlbarView-row-inner {
-  background-color: var(--cx-accent-soft) !important;
+/* Address bar dropdown: hovered / selected row uses the same grey as
+   menus. [Nova] Firefox paints the row itself through these variables;
+   do not also colour .urlbarView-row-inner or the two greys stack up. */
+.urlbarView,
+#urlbar {
+  --urlbarview-background-color-hover:    var(--cx-hover) !important;
+  --urlbarview-background-color-selected: var(--cx-hover) !important;
+  --urlbarview-text-color-selected:       var(--cx-text) !important;
+  --urlbarview-result-button-selected-color:            var(--cx-text) !important;
+  --urlbarview-result-button-selected-background-color: transparent !important;
+  --urlbarview-result-button-hover-color:               var(--cx-text) !important;
+  --urlbarview-result-button-hover-background-color:    var(--cx-hover) !important;
+}
+.urlbarView-row > .urlbarView-row-inner {
+  background-color: transparent !important;
+}
+.urlbarView-row[selected] {
   color: var(--cx-text) !important;
 }
 .urlbarView-row[selected] :is(.urlbarView-url, .urlbarView-action, .urlbarView-title-separator) {
@@ -903,3 +923,76 @@ menupopup menu,
   --download-progress-fill-color: var(--cx-text) !important;
 }
 #places .downloadProgress::-moz-progress-bar { border-radius: 2px !important; }
+
+/* ---------- Dialogs (quit, close tabs, prompts…) ----------
+   Softer than Firefox's defaults: plain surface instead of the tinted
+   one, no black outline on the secondary button, and a grey primary
+   button instead of a solid black one. */
+
+/* Dialog frame (drawn by the browser window around the dialog) */
+:root {
+  --dialog-background-color: var(--cx-surface) !important;
+  --dialog-border-color:     var(--cx-border) !important;
+  --dialog-border-radius:    14px !important;
+}
+
+/* Dialog content (separate chrome document) */
+#commonDialogWindow,
+#commonDialogWindow #commonDialog {
+  background-color: var(--cx-surface) !important;
+  color: var(--cx-text) !important;
+  --text-color:              var(--cx-text) !important;
+  --text-color-deemphasized: var(--cx-text-muted) !important;
+  --background-color-canvas: var(--cx-surface) !important;
+
+  /* Secondary button: soft grey, no outline */
+  --button-border-color:              transparent !important;
+  --button-border-color-hover:        transparent !important;
+  --button-border-color-active:       transparent !important;
+  --button-background-color:          rgba(127, 127, 127, .12) !important;
+  --button-text-color:                var(--cx-text) !important;
+  --button-border-radius:             var(--cx-radius) !important;
+
+  /* Primary button: stronger grey instead of solid black */
+  --button-background-color-primary:        rgba(127, 127, 127, .26) !important;
+  --button-background-color-primary-hover:  rgba(127, 127, 127, .34) !important;
+  --button-background-color-primary-active: rgba(127, 127, 127, .42) !important;
+  --button-text-color-primary:              var(--cx-text) !important;
+  --button-text-color-primary-hover:        var(--cx-text) !important;
+  --button-text-color-primary-active:       var(--cx-text) !important;
+  --button-border-color-primary:            transparent !important;
+}
+
+/* Dialog spacing: more room around the content, tight spacing between
+   lines. [Nova] Firefox gives every .dialogRow a bottom margin equal to
+   --grid-padding, so the outer padding and the line spacing must be set
+   separately. Under .sizeDetermined it also lets #infoRow grow. */
+:root[subdialog] #commonDialog {
+  --grid-padding: 28px !important;      /* space around the content */
+  --cx-dialog-row-gap: 10px;            /* space between lines */
+}
+:root[subdialog] #commonDialog .dialogRow {
+  margin-block: 0 var(--cx-dialog-row-gap) !important;
+  flex: 0 0 auto !important;
+}
+:root[subdialog] #commonDialog .dialogRow:not([hidden]):last-of-type,
+:root[subdialog] #commonDialog .dialogRow:not([hidden]):not(:has(~ .dialogRow:not([hidden]))) {
+  margin-block-end: 0 !important;
+}
+:root[subdialog] #commonDialog :is(#dialogGrid, #infoContainer) {
+  row-gap: 0 !important;
+  justify-content: flex-start !important;
+}
+:root[subdialog] #commonDialog #infoTitle { margin-bottom: 0 !important; }
+:root[subdialog] #commonDialog #infoBody:empty { display: none !important; }
+:root[subdialog] #commonDialog #infoBody:not(:empty) { margin-top: 6px !important; }
+:root[subdialog] #commonDialog #dialogGrid {
+  margin-bottom: 20px !important;   /* space above the buttons */
+}
+:root[subdialog] #commonDialog::part(dialog-button) {
+  min-height: 36px !important;
+  padding-inline: 16px !important;
+  margin-inline: 5px !important;
+  /* no focus ring around the default button */
+  outline: none !important;
+}
