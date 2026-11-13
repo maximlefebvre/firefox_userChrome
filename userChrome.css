@@ -1,34 +1,33 @@
 /* ==================================================
-   userChrome.css — style "Codex" pour Firefox 157 (interface Nova)
-   Onglets sur fond gris ; barre d'outils + favoris + page réunis
-   dans une seule carte blanche arrondie. Suit le mode clair / sombre
-   de macOS si le thème Firefox est "Système — automatique".
-   Pas de violet : accents en noir / blanc / gris (voir aussi userContent.css).
-   Version précédente : userChrome.avant-codex.css
+   userChrome.css — minimal light/dark theme for Firefox (Nova UI)
+   Tabs on a grey background; toolbar + bookmarks + page merged into
+   a single rounded card. Follows the macOS light/dark mode when the
+   Firefox theme is set to "System — auto".
+   No purple: black / white / grey accents (see also userContent.css).
    ================================================== */
 
 /* ---------- Palette ---------- */
 
 :root {
-  --cx-bg:         #ececec;   /* fond fenêtre / barre d'onglets */
-  --cx-surface:    #ffffff;   /* carte : barre d'outils + page */
-  --cx-field:      #efefef;   /* champ d'adresse au survol */
+  --cx-bg:         #ececec;   /* window / tab bar background */
+  --cx-surface:    #ffffff;   /* card: toolbar + page */
+  --cx-field:      #efefef;   /* address field on hover */
   --cx-hover:      rgba(0, 0, 0, .05);
   --cx-border:     rgba(0, 0, 0, .09);
   --cx-text:       #1f1f1f;
   --cx-text-muted: #6b6b6b;
-  --cx-accent:     #1f1f1f;   /* remplace le violet de Firefox */
+  --cx-accent:     #1f1f1f;   /* replaces Firefox purple */
   --cx-accent-hover:  #000000;
   --cx-accent-active: #3a3a3a;
   --cx-on-accent:  #ffffff;
-  --cx-accent-soft: rgba(0, 0, 0, .07);  /* remplace le violet léger */
-  --cx-radius:     10px;   /* un seul arrondi pour tout */
-  --cx-gap:        3px;   /* espace gris autour de la carte */
-  /* Coins du bas de la carte : concentriques avec ceux de la fenêtre
-     (macOS Tahoe : 16px). Arrondi intérieur = extérieur - marge. */
+  --cx-accent-soft: rgba(0, 0, 0, .07);  /* replaces light purple */
+  --cx-radius:     10px;   /* one radius for everything */
+  --cx-gap:        3px;   /* grey gap around the card */
+  /* Bottom corners of the card: concentric with the window corners
+     (macOS 26+: 16px). Inner radius = outer radius - gap. */
   --cx-radius-bottom: calc(var(--cx-window-radius) - var(--cx-gap));
-  /* --window-border-radius n'est défini que dans la fenêtre principale :
-     valeur de secours selon macOS pour les autres fenêtres (Bibliothèque) */
+  /* --window-border-radius is only defined in the main window:
+     macOS-dependent fallback for other windows (Library) */
   --cx-window-radius: var(--window-border-radius, 10px);
 }
 
@@ -53,7 +52,7 @@
   }
 }
 
-/* ---------- Plus de violet : accents en noir / blanc / gris ---------- */
+/* ---------- No purple: black / white / grey accents ---------- */
 
 :root,
 menupopup,
@@ -95,14 +94,14 @@ panel,
   --panel-item-active-bgcolor:     var(--cx-accent-soft) !important;
 }
 
-/* Texte sélectionné dans la barre d'adresse */
+/* Selected text in the address bar */
 #urlbar-input::selection,
 .urlbar-input::selection {
   background-color: rgba(127, 127, 127, .3) !important;
   color: inherit !important;
 }
 
-/* Suggestion sélectionnée dans la liste de la barre d'adresse */
+/* Selected suggestion in the address bar dropdown */
 .urlbarView-row[selected] > .urlbarView-row-inner,
 .urlbarView-row:hover > .urlbarView-row-inner {
   background-color: var(--cx-accent-soft) !important;
@@ -112,7 +111,7 @@ panel,
   color: var(--cx-text-muted) !important;
 }
 
-/* Icônes et compteurs qui prenaient l'accent violet */
+/* Badges that used the purple accent */
 .toolbarbutton-badge {
   background-color: var(--cx-accent) !important;
   color: var(--cx-on-accent) !important;
@@ -133,10 +132,10 @@ panel,
   --toolbar-field-color:             var(--cx-text) !important;
   --toolbar-field-focus-color:       var(--cx-text) !important;
   --toolbar-field-border-color:      transparent !important;
-  --chrome-content-separator-color:  transparent !important;  /* [157] liseré blanc */
+  --chrome-content-separator-color:  transparent !important;  /* [Nova] white line above content */
 }
 
-/* Fond gris de la fenêtre */
+/* Grey window background */
 #navigator-toolbox,
 #titlebar,
 #TabsToolbar,
@@ -148,9 +147,9 @@ panel,
   outline: none !important;
 }
 
-/* ---------- Onglets ---------- */
+/* ---------- Tabs ---------- */
 
-/* Hauteur [157] : --tab-min-height seul ne suffit plus */
+/* Height [Nova]: --tab-min-height alone is no longer enough */
 :root,
 :root #tabbrowser-tabs {
   --tab-min-height: 32px !important;
@@ -160,7 +159,7 @@ panel,
 .tab-stack {
   min-height: var(--tab-min-height) !important;
 }
-/* Même espace au-dessus et au-dessous de l'onglet */
+/* Same space above and below the tab */
 #TabsToolbar,
 #TabsToolbar-customization-target,
 #tabbrowser-tabs,
@@ -186,13 +185,13 @@ panel,
   transition: background-color .12s ease, border-color .12s ease !important;
 }
 
-/* Survol : fond gris et contour léger sur les onglets inactifs */
+/* Hover: grey background and light border on inactive tabs */
 .tabbrowser-tab:hover:not([selected]) .tab-background {
   background: rgba(127, 127, 127, .12) !important;
   border-color: var(--cx-border) !important;
 }
 .tabbrowser-tab:hover:not([selected]) .tab-label { color: var(--cx-text) !important; }
-/* Survol de l'onglet actif : contour un peu plus marqué */
+/* Hovering the active tab: slightly stronger border */
 #tabbrowser-tabs .tabbrowser-tab[selected]:hover .tab-background {
   border-color: rgba(127, 127, 127, .3) !important;
 }
@@ -221,9 +220,9 @@ panel,
 #tabs-newtab-button > .toolbarbutton-icon,
 #new-tab-button > .toolbarbutton-icon { border-radius: var(--cx-radius) !important; }
 
-/* ---------- Carte : barre d'outils + favoris + page ---------- */
+/* ---------- Card: toolbar + bookmarks + page ---------- */
 
-/* Haut de la carte : barre de navigation */
+/* Top of the card: navigation bar */
 #nav-bar {
   margin-inline: var(--cx-gap) !important;
   background: var(--cx-surface) !important;
@@ -234,7 +233,7 @@ panel,
   padding-inline: 6px !important;
 }
 
-/* Milieu : barre de favoris */
+/* Middle: bookmarks toolbar */
 #PersonalToolbar {
   margin-inline: var(--cx-gap) !important;
   background: var(--cx-surface) !important;
@@ -247,13 +246,13 @@ panel,
   font-size: 12px !important;
 }
 
-/* Bas : la page, séparée de la barre par un trait fin */
+/* Bottom: the page, separated from the toolbar by a thin line */
 #tabbrowser-tabpanels {
   margin: 0 var(--cx-gap) var(--cx-gap) var(--cx-gap) !important;
   padding: 0 !important;
   background: var(--cx-surface) !important;
   border: 1px solid var(--cx-border) !important;
-  border-top-color: rgba(127, 127, 127, .12) !important;  /* trait plus léger */
+  border-top-color: rgba(127, 127, 127, .12) !important;  /* lighter line */
   border-radius: 0 0 var(--cx-radius-bottom) var(--cx-radius-bottom) !important;
   overflow: clip !important;
   box-shadow: none !important;
@@ -271,14 +270,13 @@ browser[type="content"] {
 }
 .browserStack { background: var(--cx-surface) !important; }
 
-/* [157 macOS] Barres de défilement des pages : Firefox les raccourcit
-   pour qu'elles ne soient pas coupées par les coins arrondis, mais
-   seulement pour ses propres arrondis.
-   Ici on ne les raccourcit pas : elles descendent jusqu'en bas, le fond
-   de la barre suit l'arrondi du coin, et le pouce garde la même marge
-   à droite et en bas (sa marge interne macOS). Le pouce n'est pas coupé
-   tant que --cx-scrollbar-inset >= ~0 avec un coin <= 14px ; augmenter
-   cette valeur pour remonter la barre si besoin. */
+/* [Nova, macOS] Page scrollbars: Firefox shortens them so they are not
+   clipped by rounded corners, but only for its own corners.
+   Here they are not shortened: they run to the bottom, the track follows
+   the corner curve, and the thumb keeps the same gap on the right and at
+   the bottom (its macOS inner padding). The thumb is not clipped as long
+   as --cx-scrollbar-inset >= ~0 with a corner <= 14px; increase this
+   value to raise the scrollbar if needed. */
 :root { --cx-scrollbar-inset: 0px; }
 .browserContainer {
   --content-scrollbar-inset-block: 0 var(--cx-scrollbar-inset) !important;
@@ -290,9 +288,9 @@ browser[type="content"] {
   -moz-scrollbar-inset-inline: var(--cx-scrollbar-inset) var(--cx-scrollbar-inset) !important;
 }
 
-/* ---------- Barre d'adresse : champ gris, sans contour, centré ---------- */
+/* ---------- Address bar: centred field ---------- */
 
-/* Hauteur [157] : la variable seule n'est plus respectée */
+/* Height [Nova]: the variable alone is no longer honoured */
 #urlbar-container,
 #search-container,
 #nav-bar-customization-target,
@@ -310,7 +308,7 @@ browser[type="content"] {
   margin-inline: auto !important;
 }
 
-/* [157] le fond peut être #urlbar-background ou .urlbar-background */
+/* [Nova] the background can be #urlbar-background or .urlbar-background */
 #urlbar,
 #urlbar :is(#urlbar-background, .urlbar-background) {
   border-radius: var(--cx-radius) !important;
@@ -321,7 +319,7 @@ browser[type="content"] {
   box-shadow: none !important;
   transition: background-color .15s ease, border-color .15s ease !important;
 }
-/* Survol de la barre d'adresse : fond gris clair, contour inchangé */
+/* Address bar hover: light grey background, unchanged border */
 #urlbar-container:hover #urlbar:not([focused], [open]) :is(#urlbar-background, .urlbar-background),
 #urlbar:not([focused], [open]):hover :is(#urlbar-background, .urlbar-background) {
   background-color: var(--cx-field) !important;
@@ -337,14 +335,14 @@ browser[type="content"] {
 #urlbar-input { font-size: 13px !important; }
 #urlbar:not([focused]) #urlbar-input { text-align: center !important; }
 
-/* Icônes à gauche de l'URL (cadenas, bouclier) plus discrètes */
+/* Icons left of the URL (lock, shield) more subtle */
 #identity-box,
 #tracking-protection-icon-container,
 .tracking-protection-icon-container {
   border-radius: var(--cx-radius) !important;
   background-color: transparent !important;
 }
-/* Bouclier, étoile, etc. : cachés, ils réapparaissent au survol */
+/* Shield, star, etc.: hidden, they reappear on hover */
 #urlbar:not([focused]) :is(#tracking-protection-icon-container,
                            #identity-box,
                            #page-action-buttons) {
@@ -356,14 +354,14 @@ browser[type="content"] {
                                  #page-action-buttons) { opacity: .6; }
 #urlbar-input-container { padding-inline: 4px !important; }
 
-/* ---------- Boutons de la barre d'outils ---------- */
+/* ---------- Toolbar buttons ---------- */
 
 #nav-bar {
   --toolbarbutton-outer-padding: 3px !important;
   --toolbarbutton-inner-padding: 7px !important;
 }
 
-/* Sans contour ; fond gris au survol, plus foncé au clic */
+/* No border; grey background on hover, darker when pressed */
 #nav-bar toolbarbutton > :is(.toolbarbutton-icon, .toolbarbutton-badge-stack, .toolbarbutton-text) {
   border: none !important;
   border-radius: var(--cx-radius) !important;
@@ -377,7 +375,7 @@ browser[type="content"] {
 }
 #stop-reload-button { margin-right: 8px !important; }
 
-/* ---------- Menus et panneaux ---------- */
+/* ---------- Menus and panels ---------- */
 
 menupopup,
 panel {
@@ -389,7 +387,7 @@ panel {
   --arrowpanel-border-color:  var(--cx-border) !important;
 }
 
-/* ---------- Arrondis : la même valeur partout ---------- */
+/* ---------- Radii: the same value everywhere ---------- */
 
 :root {
   --border-radius-medium: var(--cx-radius) !important;
@@ -412,7 +410,7 @@ menupopup menu,
   border-radius: var(--cx-radius) !important;
 }
 
-/* ---------- Icônes : noir / blanc, plus de violet ---------- */
+/* ---------- Icons: black / white, no purple ---------- */
 
 :root {
   --toolbarbutton-icon-fill:          var(--cx-text) !important;
@@ -425,10 +423,10 @@ menupopup menu,
   --tab-icon-color:                   var(--cx-text) !important;
 }
 
-/* ---------- Petits boutons de la barre d'adresse (Nova) ----------
-   Firefox 157 dessine leur fond via ces variables : le sélecteur de
-   moteur est un <moz-button> dont le fond est dans son shadow DOM,
-   il ne faut donc PAS colorer l'élément lui-même (double fond). */
+/* ---------- Small address bar buttons (Nova) ----------
+   Firefox draws their background through these variables: the search
+   engine switcher is a <moz-button> whose background lives in its shadow
+   DOM, so do NOT colour the element itself (double background). */
 
 :root,
 #urlbar {
@@ -442,7 +440,7 @@ menupopup menu,
   --urlbar-inner-border-radius:         var(--cx-radius) !important;
 }
 
-/* Sélecteur de moteur : même arrondi que le reste, plus compact */
+/* Search engine switcher: same radius as the rest, more compact */
 .searchmode-switcher {
   --button-border-radius: var(--cx-radius) !important;
   --button-padding: 0 6px !important;
@@ -462,16 +460,16 @@ menupopup menu,
                        .bookmark-item > .toolbarbutton-icon,
                        .tab-close-button):not(#fxa-avatar-image, .avatar, [src]),
 #PersonalToolbar .toolbarbutton-icon:not([src]) {
-  /* fill seulement : forcer aussi stroke transforme certaines icônes
-     (profil, zoom) en disques pleins */
+  /* fill only: also forcing stroke turns some icons
+     (profile, zoom) into solid discs */
   fill: var(--cx-text) !important;
   color: var(--cx-text) !important;
 }
-/* Les icônes des menus (profil, zoom…) gardent leur dessin d'origine */
+/* Menu icons (profile, zoom…) keep their original drawing */
 
-/* ---------- Survols : gris neutre partout ---------- */
+/* ---------- Hovers: neutral grey everywhere ---------- */
 
-/* Favoris */
+/* Bookmarks */
 #PersonalToolbar toolbarbutton.bookmark-item {
   background-color: transparent !important;
   color: var(--cx-text) !important;
@@ -485,7 +483,7 @@ menupopup menu,
   background-color: var(--cx-border) !important;
 }
 
-/* Icône de recherche / boutons dans la barre d'adresse */
+/* Search icon / buttons inside the address bar */
 #urlbar :is(#identity-icon-box,
             #identity-permission-box,
             #tracking-protection-icon-container,
@@ -503,44 +501,43 @@ menupopup menu,
   color: var(--cx-text) !important;
 }
 
-/* Menus et panneaux */
+/* Menus and panels */
 :is(menupopup menuitem, menupopup menu, .subviewbutton):is(:hover, [_moz-menuactive]) {
   background-color: var(--cx-hover) !important;
   color: var(--cx-text) !important;
 }
 
-/* ---------- Aperçu au survol des onglets ----------
-   Ce CSS ne fait que cacher la miniature : Firefox continue de la
-   calculer en arrière-plan. Pour la désactiver vraiment, passer par
-   about:config (effet immédiat, sans redémarrer) :
+/* ---------- Tab hover preview ----------
+   This CSS only hides the thumbnail: Firefox keeps generating it in the
+   background. To really disable it, use about:config (applies
+   immediately, no restart):
      - browser.tabs.hoverPreview.showThumbnails = false
-         → plus de miniature, la carte titre + adresse reste
+         → no thumbnail, the title + address card stays
      - browser.tabs.hoverPreview.enabled = false
-         → plus de carte du tout, retour à la simple bulle de titre
-   Si la miniature réapparaît après une mise à jour de Firefox, c'est
-   sans doute que #tab-preview-panel a changé de nom : utiliser
-   about:config dans ce cas. */
+         → no card at all, back to the plain title tooltip
+   If the thumbnail comes back after a Firefox update, #tab-preview-panel
+   has probably been renamed: use about:config in that case. */
 
-/* Pour masquer la miniature (et garder titre + adresse), retire les commentaires :
+/* To hide the thumbnail (and keep title + address), uncomment:
 #tab-preview-panel :is(.tab-preview-thumbnail-container, .tab-preview-thumbnail) {
   display: none !important;
 }
 */
 
-/* Pour masquer tout l'aperçu, retire les commentaires ci-dessous :
+/* To hide the whole preview, uncomment below:
 #tab-preview-panel { display: none !important; }
 */
 
-/* ---------- Photo de profil ----------
-   16px par défaut (comme les icônes) ; +1px. La marge négative garde
-   le bouton à la même taille et la photo centrée. */
+/* ---------- Profile picture ----------
+   16px by default (like the icons); +1px. The negative margin keeps
+   the button the same size and the picture centred. */
 #fxa-toolbar-menu-button #fxa-avatar-image {
   width: 17px !important;
   height: 17px !important;
   margin: -0.5px !important;
 }
 
-/* ---------- Panneau des téléchargements ---------- */
+/* ---------- Downloads panel ---------- */
 
 #downloadsPanel {
   --download-progress-fill-color:   var(--cx-text) !important;
@@ -552,7 +549,7 @@ menupopup menu,
 
 #downloadsPanel-mainView { padding: 6px !important; }
 
-/* Lignes : même arrondi que le reste, survol gris neutre */
+/* Rows: same radius as the rest, neutral grey hover */
 #downloadsListBox > richlistitem {
   border-radius: var(--cx-radius) !important;
   margin-block: 1px !important;
@@ -569,7 +566,7 @@ menupopup menu,
 }
 .downloadMainArea { border-radius: var(--cx-radius) !important; }
 
-/* Textes : nom du fichier en avant, détails discrets */
+/* Text: file name emphasised, subtle details */
 .downloadTarget {
   font-size: 13px !important;
   font-weight: 500 !important;
@@ -581,7 +578,7 @@ menupopup menu,
   opacity: 1 !important;
 }
 
-/* Barre de progression fine, noire (blanche en sombre) */
+/* Thin progress bar, black (white in dark mode) */
 #downloadsPanel .downloadProgress {
   height: 4px !important;
   border-radius: 2px !important;
@@ -592,7 +589,7 @@ menupopup menu,
   border-radius: 2px !important;
 }
 
-/* Boutons (dossier, annuler, réessayer) : carrés arrondis, sans fond */
+/* Buttons (folder, cancel, retry): rounded, no background */
 #downloadsPanel .downloadButton {
   border-radius: var(--cx-radius) !important;
   background-color: transparent !important;
@@ -614,7 +611,7 @@ menupopup menu,
   opacity: .75;
 }
 
-/* Résumé et pied : fond transparent, trait fin, bouton au survol gris */
+/* Summary and footer: transparent background, thin line, grey hover */
 #downloadsSummary {
   border-top-color: var(--cx-border) !important;
   border-radius: 0 0 var(--cx-radius) var(--cx-radius) !important;
@@ -634,29 +631,29 @@ menupopup menu,
 }
 
 /* ==================================================
-   Fenêtre Bibliothèque (Historique, Téléchargements, Marque-pages)
-   Même logique que la fenêtre principale : fond gris, contenu dans
-   une carte blanche arrondie, survols gris neutres.
+   Library window (History, Downloads, Bookmarks)
+   Same logic as the main window: grey background, content in a
+   rounded card, neutral grey hovers.
    ================================================== */
 
-/* Carte : arrondi = arrondi des lignes + marge interne → concentrique.
-   Avec 10px + 3px = 13px = arrondi fenêtre (16px) - marge (3px) :
-   concentrique aussi avec le coin de la fenêtre. */
+/* Card: radius = row radius + inner padding → concentric.
+   With 10px + 3px = 13px = window radius (16px) - gap (3px):
+   also concentric with the window corner. */
 #places {
   --cx-list-pad: 3px;
   --cx-card-radius: calc(var(--cx-radius) + var(--cx-list-pad));
-  /* Coin bas droit : la valeur calculée depuis --window-border-radius
-     tombe à ~0 dans la Bibliothèque. Mesuré sur capture : fenêtre = 16px,
-     donc 16 - 3 = 13px = arrondi de la carte. On le fixe directement. */
+  /* Bottom-right corner: the value computed from --window-border-radius
+     drops to ~0 in the Library. Measured on a screenshot: window = 16px,
+     so 16 - 3 = 13px = card radius. Set it directly. */
   --cx-radius-bottom: var(--cx-card-radius);
 }
 
-/* Barre de titre native : macOS la dessine lui-même ; on tente de lui
-   donner le fond de la fenêtre (sans effet si macOS l'impose). */
+/* Native title bar: macOS draws it itself; try to give it the window
+   background (no effect if macOS enforces its own). */
 #places {
   appearance: none !important;
-  /* La Bibliothèque ne déclare pas de schéma de couleurs : sans ça,
-     ses listes et champs natifs restent en clair même en mode sombre */
+  /* The Library declares no color scheme: without this, its native
+     lists and fields stay light even in dark mode */
   color-scheme: light dark !important;
 }
 
@@ -667,12 +664,12 @@ menupopup menu,
   color: var(--cx-text) !important;
 }
 
-/* Barre du haut : fond gris, plus de trait */
+/* Top bar: grey background, no line */
 #places #placesToolbar {
   background: var(--cx-bg) !important;
   border-bottom: none !important;
   padding: 0 8px !important;
-  min-height: 44px !important;   /* même hauteur que la barre d'adresse */
+  min-height: 44px !important;   /* same height as the address bar */
   align-items: center !important;
   --toolbar-item-height: 32px;
 }
@@ -698,8 +695,8 @@ menupopup menu,
   background-color: var(--cx-border) !important;
 }
 
-/* Recherche : <moz-input-search>, son champ est dans un shadow DOM.
-   On ne style pas l'élément lui-même (double boîte) mais ses variables. */
+/* Search: <moz-input-search>, its field lives in a shadow DOM.
+   The host draws the pill and the inner field is made transparent. */
 #places #searchFilter {
   appearance: none !important;
   box-sizing: border-box !important;
@@ -711,7 +708,7 @@ menupopup menu,
   box-shadow: none !important;
   overflow: clip !important;
   transition: background-color .12s ease, box-shadow .12s ease !important;
-  /* champ interne transparent : c'est l'élément qui dessine la pilule */
+  /* transparent inner field: the host element draws the pill */
   --input-background-color: transparent;
   --input-border: none;
   --input-border-radius: var(--cx-radius);
@@ -721,7 +718,7 @@ menupopup menu,
   --icon-color: var(--cx-text-muted);
   --focus-outline: none;
 }
-/* Champ interne centré verticalement dans la pilule */
+/* Inner field vertically centred in the pill */
 #places #searchFilter {
   display: flex !important;
   align-items: center !important;
@@ -730,7 +727,7 @@ menupopup menu,
   --input-height: 100%;
   line-height: normal !important;
 }
-/* Survol : gris clair, contour inchangé */
+/* Hover: light grey, unchanged border */
 #places #searchFilter:hover:not(:focus-within) {
   background-color: var(--cx-field) !important;
 }
@@ -739,17 +736,17 @@ menupopup menu,
   box-shadow: 0 2px 10px rgba(0, 0, 0, .08) !important;
 }
 
-/* Colonne de gauche : sans bordure, ligne choisie en gris */
+/* Left column: no border */
 #places #placesList {
   appearance: none !important;
   border: none !important;
   margin: 0 0 var(--cx-gap) 6px !important;
 }
-/* Lignes : même style que les onglets
-   - repos : transparent, contour invisible
-   - survol : gris + contour léger (comme un onglet inactif survolé)
-   - sélection : blanc + contour (comme l'onglet actif)
-   (arbre XUL : l'arrondi n'est appliqué que si Firefox le permet) */
+/* Rows: same style as the tabs
+   - idle: transparent, invisible border
+   - hover: grey + light border (like a hovered inactive tab)
+   - selected: white + border (like the active tab)
+   (XUL tree: the radius only applies if Firefox supports it) */
 #places #placesList > treechildren::-moz-tree-row {
   height: 32px !important;
   min-height: 32px !important;
@@ -779,7 +776,7 @@ menupopup menu,
   color: var(--cx-text) !important;
 }
 
-/* Séparateur invisible mais toujours redimensionnable */
+/* Invisible splitter, still resizable */
 #places #placesView > splitter {
   border: none !important;
   background: transparent !important;
@@ -787,8 +784,8 @@ menupopup menu,
   margin-inline-start: 0 !important;
 }
 
-/* Contenu : la liste qui défile devient la carte blanche arrondie
-   (sa barre de défilement reste ainsi à l'intérieur) */
+/* Content: the scrolling list itself becomes the rounded card
+   (so its scrollbar stays inside) */
 #places :is(#contentView, #placesViewsBox) {
   background: transparent !important;
   border: none !important;
@@ -805,13 +802,13 @@ menupopup menu,
   overflow: clip;
 }
 #places #downloadsListBox { overflow-y: auto !important; overflow-x: hidden !important; }
-/* Barre de défilement fine, sans fond : la piste native (fond clair +
-   trait) remplissait le bord droit et cachait les coins arrondis */
+/* Thin scrollbar without track: the native track (light background +
+   line) filled the right edge and hid the rounded corners */
 #places :is(#placeContent, #downloadsListBox) {
   scrollbar-width: thin !important;
   scrollbar-color: rgba(127, 127, 127, .45) transparent !important;
 }
-/* Panneau de détails (marque-pages) : sous la carte, sur le fond gris */
+/* Details pane (bookmarks): below the card, on the grey background */
 #places #detailsPane {
   border-top: none !important;
   background-color: var(--cx-bg) !important;
@@ -821,7 +818,7 @@ menupopup menu,
   border-radius: var(--cx-radius) !important;
 }
 
-/* Arbre Historique / Marque-pages */
+/* History / Bookmarks tree */
 #places #placeContent > treechildren::-moz-tree-row {
   min-height: 30px !important;
   border: none !important;
@@ -836,11 +833,11 @@ menupopup menu,
   color: var(--cx-text) !important;
 }
 
-/* Liste des téléchargements : lignes arrondies et espacées */
+/* Downloads list: rounded, spaced rows */
 #places #downloadsListBox { padding: var(--cx-list-pad) !important; }
-/* Pas de marge au-dessus / au-dessous : seule la marge interne de la
-   liste (--cx-list-pad) entoure les lignes, identique sur les 4 côtés.
-   L'espace entre deux lignes est porté par la ligne suivante. */
+/* No margin above / below: only the list padding (--cx-list-pad)
+   surrounds the rows, identical on all 4 sides.
+   The gap between two rows is carried by the next row. */
 #places #downloadsListBox > richlistitem + richlistitem {
   margin-block-start: 2px !important;
 }
@@ -877,7 +874,7 @@ menupopup menu,
   color: var(--cx-text-muted) !important;
 }
 
-/* Bouton à droite (afficher dans le Finder, réessayer…) */
+/* Right-hand button (show in Finder, retry…) */
 #places .downloadButton {
   border-radius: var(--cx-radius) !important;
 }
@@ -897,7 +894,7 @@ menupopup menu,
   opacity: .7;
 }
 
-/* Barre de progression : même style que le panneau */
+/* Progress bar: same style as the panel */
 #places .downloadProgress {
   height: 4px !important;
   border-radius: 2px !important;

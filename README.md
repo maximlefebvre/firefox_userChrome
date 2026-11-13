@@ -1,66 +1,64 @@
 # Firefox userChrome
 
-Un thème simple pour Firefox, en clair et en sombre, fait de deux feuilles de style :
+A simple light and dark theme for Firefox, made of two stylesheets:
 
-- **`userChrome.css`** pour l'interface : onglets, barre d'adresse, menus,
-  panneau des téléchargements, fenêtre Bibliothèque. C'est le thème lui-même.
-- **`userContent.css`** (facultatif) pour les pages internes de Firefox :
-  paramètres, nouvel onglet, extensions, `about:config`… Il n'a aucun effet
-  sur les sites web.
+- **`userChrome.css`** for the browser UI: tabs, address bar, menus,
+  downloads panel, Library window. This is the theme itself.
+- **`userContent.css`** (optional) for Firefox internal pages: settings,
+  new tab, add-ons, `about:config`… It has no effect on websites.
 
-Ce que fait le thème :
+What the theme does:
 
-- Fond neutre, onglets en pilule, barre d'adresse centrée
-- Barre d'outils et page réunies dans une carte arrondie
-- Plus de violet : accents en noir, blanc et gris
-- Bascule automatiquement entre clair et sombre selon macOS
-- Fenêtre Bibliothèque, panneau des téléchargements et paramètres assortis
+- Neutral background, pill-shaped tabs, centred address bar
+- Toolbar and page merged into a single rounded card
+- No purple: black, white and grey accents
+- Switches automatically between light and dark with macOS
+- Matching Library window, downloads panel and settings
 
-## Captures d'écran
+## Screenshots
 
-### Clair
+### Light
 
-![Qwant en clair](screenshots/light-qwant.webp)
-![Archcraft en clair](screenshots/light-archcraft.webp)
-![Bibliothèque en clair](screenshots/light-bibliotheque.webp)
-![Paramètres en clair](screenshots/light-parametres.webp)
+![Qwant, light](screenshots/light-qwant.webp)
+![Archcraft, light](screenshots/light-archcraft.webp)
+![Library, light](screenshots/light-bibliotheque.webp)
+![Settings, light](screenshots/light-parametres.webp)
 
-### Sombre
+### Dark
 
-![Qwant en sombre](screenshots/dark-qwant.webp)
-![Archcraft en sombre](screenshots/dark-archcraft.webp)
-![Bibliothèque en sombre](screenshots/dark-bibliotheque.webp)
-![Paramètres en sombre](screenshots/dark-parametres.webp)
+![Qwant, dark](screenshots/dark-qwant.webp)
+![Archcraft, dark](screenshots/dark-archcraft.webp)
+![Library, dark](screenshots/dark-bibliotheque.webp)
+![Settings, dark](screenshots/dark-parametres.webp)
 
 ## Installation
 
-1. **Activer les CSS personnalisés.** Ouvrir `about:config` et passer
-   `toolkit.legacyUserProfileCustomizations.stylesheets` à `true`.
-2. **Trouver le dossier du profil.** Ouvrir `about:support` et cliquer sur
-   **Dossier de profil → Ouvrir le dossier**. Y créer un dossier `chrome`
-   s'il n'existe pas.
-3. **Copier les fichiers** dans ce dossier `chrome` :
-   - `userChrome.css` pour le thème de l'interface ;
-   - `userContent.css` si l'on veut aussi les pages internes de Firefox
-     assorties (sans lui, elles gardent les couleurs d'origine de Firefox,
-     violet compris).
-4. **Passer le thème sur Système.** Dans `about:addons` → **Thèmes**, activer
-   **« Système — automatique »**. C'est ce réglage qui permet au thème de suivre
-   automatiquement le mode clair ou sombre de macOS.
-5. **Redémarrer Firefox.**
+1. **Enable custom stylesheets.** Open `about:config` and set
+   `toolkit.legacyUserProfileCustomizations.stylesheets` to `true`.
+2. **Find your profile folder.** Open `about:support` and click
+   **Profile Folder → Open Folder**. Create a `chrome` folder there if it
+   does not exist.
+3. **Copy the files** into that `chrome` folder:
+   - `userChrome.css` for the browser UI theme;
+   - `userContent.css` if you also want matching Firefox internal pages
+     (without it, they keep Firefox's default colours, purple included).
+4. **Set the theme to System.** In `about:addons` → **Themes**, enable
+   **"System — auto"**. This is what lets the theme follow the macOS light
+   or dark mode automatically.
+5. **Restart Firefox.**
 
-Pour que les pages internes (et les sites qui le gèrent) suivent aussi le mode
-de macOS : **Paramètres → Général → Apparence des sites web → Automatique**.
+To make internal pages (and websites that support it) follow the macOS mode
+as well: **Settings → General → Website appearance → Automatic**.
 
-## Personnalisation
+## Customisation
 
-Les couleurs, l'arrondi et les marges se règlent avec les variables en haut
-des fichiers (`--cx-bg`, `--cx-surface`, `--cx-radius`, `--cx-gap`…).
-Les deux fichiers utilisent la même palette : penser à modifier les deux.
+Colours, radius and spacing are set with the variables at the top of each
+file (`--cx-bg`, `--cx-surface`, `--cx-radius`, `--cx-gap`…).
+Both files share the same palette: remember to update both.
 
-## Compatibilité
+## Compatibility
 
-Testé uniquement sur **macOS 27.2.1** avec **Firefox Developer Edition 161.0**.
+Only tested on **macOS 27.2.1** with **Firefox Developer Edition 161.0**.
 
-Le rendu sur Windows et Linux n'a pas été vérifié. Le thème s'appuie sur des
-noms internes de Firefox, qui peuvent changer d'une version à l'autre.
+Rendering on Windows and Linux has not been checked. The theme relies on
+Firefox internal names, which may change from one version to the next.
